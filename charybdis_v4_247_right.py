@@ -354,6 +354,81 @@ pl19 = Plane(origin=_orig19, x_dir=_xd19, z_dir=_zd19)
 _ext_amt19 = (_ext_tg19 - _orig19).dot(_zd19)
 pl19_tgt = Plane(origin=_orig19 + _zd19 * _ext_amt19, x_dir=_xd19, z_dir=_zd19)
 
+# ── Frame 20 planes ───────────────────────────────────────────
+_orig20   = Vector(980.134, 1577.956, 297.194) # Top-Left (Upper)
+_corn20_x = Vector(1139.880, 1576.903, 239.056) # Top-Right (Upper)
+_corn20_y = Vector(1010.747, 1741.363, 378.348) # Bottom-Left (Upper)
+_ext_tg20 = Vector(1127.906, 1595.655, 205.815) # Top-Left (Lower)
+
+# Map X and Y directions to the frame's true edges
+_xd20 = (_corn20_x - _orig20).normalized()
+_yd20 = (_corn20_y - _orig20).normalized()
+_zd20 = _xd20.cross(_yd20).normalized()
+
+pl20 = Plane(origin=_orig20, x_dir=_xd20, z_dir=_zd20)
+_ext_amt20 = (_ext_tg20 - _orig20).dot(_zd20)
+pl20_tgt = Plane(origin=_orig20 + _zd20 * _ext_amt20, x_dir=_xd20, z_dir=_zd20)
+
+# ── Frame 21 planes (Updated) ─────────────────────────────────
+_orig21   = Vector(773.836, 1582.250, 384.030) # Top-Left (Upper)
+_corn21_x = Vector(943.905, 1581.423, 311.223) # Top-Right (Upper)
+_corn21_y = Vector(808.374, 1746.018, 462.847) # Bottom-Left (Upper)
+_ext_tg21 = Vector(722.160, 1601.039, 367.635) # Top-Left (Lower)
+
+# Map X and Y directions to the frame's true edges
+_xd21 = (_corn21_x - _orig21).normalized()
+_yd21 = (_corn21_y - _orig21).normalized()
+_zd21 = _xd21.cross(_yd21).normalized()
+
+pl21 = Plane(origin=_orig21, x_dir=_xd21, z_dir=_zd21)
+_ext_amt21 = (_ext_tg21 - _orig21).dot(_zd21)
+pl21_tgt = Plane(origin=_orig21 + _zd21 * _ext_amt21, x_dir=_xd21, z_dir=_zd21)
+
+# ── Frame 22 planes ───────────────────────────────────────────
+_orig22   = Vector(919.830, 1372.672, 257.358) # Top-Left (Upper)
+_corn22_x = Vector(936.262, 1537.890, 293.865) # Top-Right (Upper)
+_corn22_y = Vector(749.761, 1373.498, 330.165) # Bottom-Left (Upper)
+_ext_tg22 = Vector(716.140, 1383.006, 302.270) # Top-Left (Lower)
+
+# Map X and Y directions to the frame's physical edges[cite: 1]
+_xd22 = (_corn22_x - _orig22).normalized()
+_yd22 = (_corn22_y - _orig22).normalized()
+_zd22 = _xd22.cross(_yd22).normalized()
+
+pl22 = Plane(origin=_orig22, x_dir=_xd22, z_dir=_zd22)
+_ext_amt22 = (_ext_tg22 - _orig22).dot(_zd22)
+pl22_tgt = Plane(origin=_orig22 + _zd22 * _ext_amt22, x_dir=_xd22, z_dir=_zd22)
+
+## ── Frame 23 planes (Corrected) ───────────────────────────────
+_orig23   = Vector(746.367, 1156.665, 324.699) # TL (Upper)[cite: 1]
+_corn23_x = Vector(916.436, 1155.838, 251.892) # TR (Upper)[cite: 1]
+_corn23_y = Vector(746.504, 1326.657, 323.088) # BL (Upper)[cite: 1]
+_ext_tg23 = Vector(716.140, 1156.399, 294.130) # TL (Lower)[cite: 1]
+
+# Map X and Y directions to the frame's true edges[cite: 1]
+_xd23 = (_corn23_x - _orig23).normalized()
+_yd23 = (_corn23_y - _orig23).normalized()
+_zd23 = _xd23.cross(_yd23).normalized()
+
+pl23 = Plane(origin=_orig23, x_dir=_xd23, z_dir=_zd23)
+_ext_amt23 = (_ext_tg23 - _orig23).dot(_zd23)
+pl23_tgt = Plane(origin=_orig23 + _zd23 * _ext_amt23, x_dir=_xd23, z_dir=_zd23)
+
+# ── Frame 24 planes ───────────────────────────────────────────
+_orig24   = Vector(747.691, 1109.337, 328.329) # Top-Left (Upper)
+_corn24_x = Vector(917.760, 1108.510, 255.522) # Top-Right (Upper)
+_corn24_y = Vector(765.285,  930.297, 371.460) # Bottom-Left (Upper)
+_ext_tg24 = Vector(716.140, 1099.346, 299.726) # Top-Left (Lower)
+
+# Map X and Y directions to the frame's true edges
+_xd24 = (_corn24_x - _orig24).normalized()
+_yd24 = (_corn24_y - _orig24).normalized()
+_zd24 = _xd24.cross(_yd24).normalized()
+
+pl24 = Plane(origin=_orig24, x_dir=_xd24, z_dir=_zd24)
+_ext_amt24 = (_ext_tg24 - _orig24).dot(_zd24)
+pl24_tgt = Plane(origin=_orig24 + _zd24 * _ext_amt24, x_dir=_xd24, z_dir=_zd24)
+
 # ══════════════════════════════════════════════════════════════
 # Frame part 1 & 2
 # ══════════════════════════════════════════════════════════════
@@ -1535,6 +1610,363 @@ with BuildPart() as frame19:
     extrude(amount=depth2 + (2.0 if depth2 > 0 else -2.0), mode=Mode.SUBTRACT)
 
 print(f"  Frame 19 valid={frame19.part.is_valid}, volume={frame19.part.volume:.1f}")
+
+# ══════════════════════════════════════════════════════════════
+# Frame 20
+# ══════════════════════════════════════════════════════════════
+print("Building frame 20...")
+with BuildPart() as frame20:
+
+    # ── Main body: 170x185 outer, 139x139 inner ───────────────
+    with BuildSketch(pl20):
+        with Locations((85.0, 92.5)): 
+            Rectangle(170.0, 185.0)
+        with Locations((85.0, 85.0)): 
+            Rectangle(139.0, 139.0, mode=Mode.SUBTRACT)
+    extrude(amount=_ext_amt20)
+
+    # ── Subtract: two slots (44.5mm wide) ─────────────────────
+    with BuildSketch(pl20_tgt):
+        with Locations((37.75, 85.0)): 
+            Rectangle(44.5, 139.0)
+        with Locations((132.25, 85.0)): 
+            Rectangle(44.5, 139.0)
+    extrude(amount=-_ext_amt20, mode=Mode.SUBTRACT)
+
+    # ── Pocket 1: Geometric Center Alignment ──────────────────
+    # p1 corners (Upper Profile)
+    p1_c1 = Vector(1051.265, 1738.986, 314.279)
+    p1_c2 = Vector(1059.348, 1726.329, 336.717)
+    p1_c3 = Vector(1106.332, 1726.019, 319.617)
+    
+    # Target center from extrude-upto profile
+    t1_c1 = Vector(1050.107, 1732.803, 311.208)
+    t1_c3 = Vector(1105.174, 1719.836, 316.547)
+    
+    p1_center = (p1_c1 + p1_c3) * 0.5
+    t1_center = (t1_c1 + t1_c3) * 0.5
+    
+    p1_xd = (p1_c2 - p1_c1).normalized()
+    p1_yd = (p1_c3 - p1_c2).normalized()
+    p1_zd = p1_xd.cross(p1_yd).normalized()
+    
+    # 1mm depth overshot for clean subtract
+    pl20_p1 = Plane(origin=p1_center - p1_zd * 1.0, x_dir=p1_xd, z_dir=p1_zd)
+    
+    with BuildSketch(pl20_p1):
+        Rectangle(29.0, 52.0) 
+        
+    depth1 = (t1_center - p1_center).dot(p1_zd)
+    extrude(amount=depth1 + (2.0 if depth1 > 0 else -2.0), mode=Mode.SUBTRACT)
+
+    # ── Pocket 2: Geometric Center Alignment ──────────────────
+    p2_c1 = Vector(1025.948, 1603.845, 247.162)
+    p2_c2 = Vector(1034.030, 1591.187, 269.600)
+    p2_c3 = Vector(1081.014, 1590.877, 252.500)
+    
+    t2_c1 = Vector(1027.106, 1610.027, 250.233)
+    t2_c3 = Vector(1082.173, 1597.060, 255.571)
+
+    p2_center = (p2_c1 + p2_c3) * 0.5
+    t2_center = (t2_c1 + t2_c3) * 0.5
+    
+    p2_xd = (p2_c2 - p2_c1).normalized()
+    p2_yd = (p2_c3 - p2_c2).normalized()
+    p2_zd = p2_xd.cross(p2_yd).normalized()
+
+    pl20_p2 = Plane(origin=p2_center - p2_zd * 1.0, x_dir=p2_xd, z_dir=p2_zd)
+
+    with BuildSketch(pl20_p2):
+        Rectangle(29.0, 52.0)
+        
+    depth2 = (t2_center - p2_center).dot(p2_zd)
+    extrude(amount=depth2 + (2.0 if depth2 > 0 else -2.0), mode=Mode.SUBTRACT)
+
+print(f"  Frame 20 valid={frame20.part.is_valid}, volume={frame20.part.volume:.1f}")
+
+# ══════════════════════════════════════════════════════════════
+# Frame 21
+# ══════════════════════════════════════════════════════════════
+print("Building frame 21...")
+with BuildPart() as frame21:
+
+    # ── Main body: 185x185 outer, 139x139 inner ───────────────
+    with BuildSketch(pl21):
+        with Locations((92.5, 92.5)): 
+            Rectangle(185.0, 185.0)
+        with Locations((85.0, 85.0)): 
+            Rectangle(139.0, 139.0, mode=Mode.SUBTRACT)
+    extrude(amount=_ext_amt21)
+
+    # ── Subtract: two slots (44.5mm wide) ─────────────────────
+    with BuildSketch(pl21_tgt):
+        with Locations((37.75, 85.0)): 
+            Rectangle(44.5, 139.0)
+        with Locations((132.25, 85.0)): 
+            Rectangle(44.5, 139.0)
+    extrude(amount=-_ext_amt21, mode=Mode.SUBTRACT)
+
+    # ── Pocket 1: Geometric Center Alignment ──────────────────
+    p1_c1 = Vector(859.074, 1743.485, 390.734)
+    p1_c2 = Vector(868.429, 1730.927, 412.729)
+    p1_c3 = Vector(914.394, 1730.703, 393.051)
+    
+    t1_c1 = Vector(857.767, 1737.288, 387.752)
+    t1_c3 = Vector(913.087, 1724.507, 390.069)
+    
+    p1_center = (p1_c1 + p1_c3) * 0.5
+    t1_center = (t1_c1 + t1_c3) * 0.5
+    
+    p1_xd = (p1_c2 - p1_c1).normalized()
+    p1_yd = (p1_c3 - p1_c2).normalized()
+    p1_zd = p1_xd.cross(p1_yd).normalized()
+    
+    pl21_p1 = Plane(origin=p1_center - p1_zd * 1.0, x_dir=p1_xd, z_dir=p1_zd)
+    
+    with BuildSketch(pl21_p1):
+        Rectangle(29.0, 52.0) 
+        
+    depth1 = (t1_center - p1_center).dot(p1_zd)
+    extrude(amount=depth1 + (2.0 if depth1 > 0 else -2.0), mode=Mode.SUBTRACT)
+
+    # ── Pocket 2: Geometric Center Alignment ──────────────────
+    # Updated coordinates based on your new profile
+    p2_c1 = Vector(830.510, 1608.044, 325.550)
+    p2_c2 = Vector(839.865, 1595.486, 347.545)
+    p2_c3 = Vector(885.830, 1595.262, 327.867)
+    
+    t2_c1 = Vector(831.817, 1614.241, 328.532)
+    t2_c3 = Vector(887.137, 1601.459, 330.850)
+
+    p2_center = (p2_c1 + p2_c3) * 0.5
+    t2_center = (t2_c1 + t2_c3) * 0.5
+    
+    p2_xd = (p2_c2 - p2_c1).normalized()
+    p2_yd = (p2_c3 - p2_c2).normalized()
+    p2_zd = p2_xd.cross(p2_yd).normalized()
+
+    pl21_p2 = Plane(origin=p2_center - p2_zd * 1.0, x_dir=p2_xd, z_dir=p2_zd)
+
+    with BuildSketch(pl21_p2):
+        Rectangle(29.0, 52.0)
+        
+    depth2 = (t2_center - p2_center).dot(p2_zd)
+    # 10.0mm depth overshot maintained from original Frame 21 script
+    extrude(amount=depth2 + (10.0 if depth2 > 0 else -10.0), mode=Mode.SUBTRACT)
+
+print(f"  Frame 21 valid={frame21.part.is_valid}, volume={frame21.part.volume:.1f}")
+
+# ══════════════════════════════════════════════════════════════
+# Frame 22
+# ══════════════════════════════════════════════════════════════
+print("Building frame 22...")
+with BuildPart() as frame22:
+
+    # ── Main body: 185x170 outer, 139x139 inner ───────────────[cite: 1]
+    with BuildSketch(pl22):
+        with Locations((92.5, 85.0)): 
+            Rectangle(185.0, 170.0)
+        with Locations((85.0, 85.0)): 
+            Rectangle(139.0, 139.0, mode=Mode.SUBTRACT)
+    extrude(amount=_ext_amt22)
+
+    # ── Subtract: two slots (44.5mm wide) ─────────────────────[cite: 1]
+    with BuildSketch(pl22_tgt):
+        with Locations((37.75, 85.0)): 
+            Rectangle(44.5, 139.0)
+        with Locations((132.25, 85.0)): 
+            Rectangle(44.5, 139.0)
+    extrude(amount=-_ext_amt22, mode=Mode.SUBTRACT)
+
+    # ── Pocket 1: Geometric Center Alignment ──────────────────[cite: 1]
+    # Corners of the original 27x50 footprint
+    p1_c1 = Vector(865.022, 1539.316, 279.898)
+    p1_c2 = Vector(875.323, 1532.958, 304.033)
+    p1_c3 = Vector(829.359, 1533.182, 323.710)
+    
+    # Target center from extrude-upto profile
+    t1_c1 = Vector(864.346, 1532.513, 278.395)
+    t1_c3 = Vector(828.682, 1526.379, 322.207)
+    
+    p1_center = (p1_c1 + p1_c3) * 0.5
+    t1_center = (t1_c1 + t1_c3) * 0.5
+    
+    p1_xd = (p1_c2 - p1_c1).normalized()
+    p1_yd = (p1_c3 - p1_c2).normalized()
+    p1_zd = p1_xd.cross(p1_yd).normalized()
+    
+    # Place plane at center and shift 1mm back for overshoot[cite: 1]
+    pl22_p1 = Plane(origin=p1_center - p1_zd * 1.0, x_dir=p1_xd, z_dir=p1_zd)
+    
+    with BuildSketch(pl22_p1):
+        Rectangle(29.0, 52.0) 
+        
+    depth1 = (t1_center - p1_center).dot(p1_zd)
+    extrude(amount=depth1 + (2.0 if depth1 > 0 else -2.0), mode=Mode.SUBTRACT)
+
+    # ── Pocket 2: Geometric Center Alignment ──────────────────[cite: 1]
+    p2_c1 = Vector(804.269, 1390.842, 266.719)
+    p2_c2 = Vector(814.570, 1384.485, 290.854)
+    p2_c3 = Vector(860.535, 1384.262, 271.176)
+    
+    t2_c1 = Vector(850.910, 1397.422, 248.545)
+    t2_c3 = Vector(804.945, 1397.646, 268.222)
+
+    p2_center = (p2_c1 + p2_c3) * 0.5
+    t2_center = (t2_c1 + t2_c3) * 0.5
+    
+    p2_xd = (p2_c2 - p2_c1).normalized()
+    p2_yd = (p2_c3 - p2_c2).normalized()
+    p2_zd = p2_xd.cross(p2_yd).normalized()
+
+    pl22_p2 = Plane(origin=p2_center - p2_zd * 1.0, x_dir=p2_xd, z_dir=p2_zd)
+
+    with BuildSketch(pl22_p2):
+        Rectangle(29.0, 52.0)
+        
+    depth2 = (t2_center - p2_center).dot(p2_zd)
+    extrude(amount=depth2 + (2.0 if depth2 > 0 else -2.0), mode=Mode.SUBTRACT)
+
+print(f"  Frame 22 valid={frame22.part.is_valid}, volume={frame22.part.volume:.1f}")
+
+# ══════════════════════════════════════════════════════════════
+# Frame 23 (Corrected Subtractions)
+# ══════════════════════════════════════════════════════════════
+print("Building frame 23 (Corrected)...")
+with BuildPart() as frame23:
+
+    # ── Main body: 185x170 outer, 139x139 inner ───────────────
+    # Calculated Local Offset for Inner Cutout: (99.25, 84.55)[cite: 1]
+    with BuildSketch(pl23):
+        with Locations((92.5, 85.0)): 
+            Rectangle(185.0, 170.0)
+        with Locations((99.25, 84.55)): 
+            Rectangle(139.0, 139.0, mode=Mode.SUBTRACT)
+    extrude(amount=_ext_amt23)
+
+    # ── Subtract: two slots (44.5mm wide) ─────────────────────
+    # Calculated Local Offsets for Slots: (51.75, 84.55) & (146.75, 84.55)[cite: 1]
+    with BuildSketch(pl23_tgt):
+        with Locations((51.75, 84.55)): 
+            Rectangle(44.5, 139.0)
+        with Locations((146.75, 84.55)): 
+            Rectangle(44.5, 139.0)
+    extrude(amount=-_ext_amt23, mode=Mode.SUBTRACT)
+
+    # ── Pocket 1: Geometric Center Alignment ──────────────────
+    p1_c1 = Vector(845.665, 1317.263, 237.204)
+    p1_c2 = Vector(856.292, 1317.489, 262.024)
+    p1_c3 = Vector(810.327, 1317.713, 281.701)
+    t1_center = (Vector(845.660, 1310.263, 237.270) + Vector(810.322, 1310.713, 281.768)) * 0.5
+    
+    p1_center = (p1_c1 + p1_c3) * 0.5
+    p1_xd = (p1_c2 - p1_c1).normalized()
+    p1_yd = (p1_c3 - p1_c2).normalized()
+    p1_zd = p1_xd.cross(p1_yd).normalized()
+    
+    pl23_p1 = Plane(origin=p1_center - p1_zd * 1.0, x_dir=p1_xd, z_dir=p1_zd)
+    with BuildSketch(pl23_p1):
+        Rectangle(29.0, 52.0)
+        
+    depth1 = (t1_center - p1_center).dot(p1_zd)
+    extrude(amount=depth1 + (2.0 if depth1 > 0 else -2.0), mode=Mode.SUBTRACT)
+
+    # ── Pocket 2: Geometric Center Alignment ──────────────────
+    p2_c1 = Vector(799.578, 1164.493, 258.332)
+    p2_c2 = Vector(810.205, 1164.720, 283.152)
+    p2_c3 = Vector(856.169, 1164.496, 263.474)
+    t2_center = (Vector(845.548, 1171.269, 238.588) + Vector(799.584, 1171.493, 258.266)) * 0.5
+
+    p2_center = (p2_c1 + p2_c3) * 0.5
+    p2_xd = (p2_c2 - p2_c1).normalized()
+    p2_yd = (p2_c3 - p2_c2).normalized()
+    p2_zd = p2_xd.cross(p2_yd).normalized()
+
+    pl23_p2 = Plane(origin=p2_center - p2_zd * 1.0, x_dir=p2_xd, z_dir=p2_zd)
+    with BuildSketch(pl23_p2):
+        Rectangle(29.0, 52.0)
+        
+    depth2 = (t2_center - p2_center).dot(p2_zd)
+    extrude(amount=depth2 + (2.0 if depth2 > 0 else -2.0), mode=Mode.SUBTRACT)
+
+print(f"  Frame 23 valid={frame23.part.is_valid}, volume={frame23.part.volume:.1f}")
+
+
+# ══════════════════════════════════════════════════════════════
+# Frame 24
+# ══════════════════════════════════════════════════════════════
+print("Building frame 24...")
+with BuildPart() as frame24:
+
+    # ── Main body: 185x185 outer, 139x139 inner ───────────────
+    with BuildSketch(pl24):
+        with Locations((92.5, 92.5)): 
+            Rectangle(185.0, 185.0)
+        with Locations((85.0, 85.0)): 
+            Rectangle(139.0, 139.0, mode=Mode.SUBTRACT)
+    extrude(amount=_ext_amt24)
+
+    # ── Subtract: two slots (44.5mm wide) ─────────────────────
+    with BuildSketch(pl24_tgt):
+        with Locations((37.75, 85.0)): 
+            Rectangle(44.5, 139.0)
+        with Locations((132.25, 85.0)): 
+            Rectangle(44.5, 139.0)
+    extrude(amount=-_ext_amt24, mode=Mode.SUBTRACT)
+
+    # ── Pocket 1: Geometric Center Alignment ──────────────────
+    # Corners of the 27x50 footprint (Upper)
+    p1_c1 = Vector(802.170, 1090.706, 265.224)
+    p1_c2 = Vector(812.482, 1097.503, 289.234)
+    p1_c3 = Vector(858.446, 1097.280, 269.556)
+    
+    # Target center from extrude-upto profile (Lower)
+    t1_c1 = Vector(802.836, 1083.931, 266.856)
+    t1_c3 = Vector(859.112, 1090.505, 271.188)
+    
+    p1_center = (p1_c1 + p1_c3) * 0.5
+    t1_center = (t1_c1 + t1_c3) * 0.5
+    
+    p1_xd = (p1_c2 - p1_c1).normalized()
+    p1_yd = (p1_c3 - p1_c2).normalized()
+    p1_zd = p1_xd.cross(p1_yd).normalized()
+    
+    # 1mm depth overshot for clean boolean subtraction
+    pl24_p1 = Plane(origin=p1_center - p1_zd * 1.0, x_dir=p1_xd, z_dir=p1_zd)
+    
+    with BuildSketch(pl24_p1):
+        # 29x52 expansion centered on original coordinates to ensure edge-break
+        Rectangle(29.0, 52.0) 
+        
+    depth1 = (t1_center - p1_center).dot(p1_zd)
+    extrude(amount=depth1 + (2.0 if depth1 > 0 else -2.0), mode=Mode.SUBTRACT)
+
+    # ── Pocket 2: Geometric Center Alignment ──────────────────
+    # Corners of the 27x50 footprint (Upper)
+    p2_c1 = Vector(816.721, 942.635, 300.894)
+    p2_c2 = Vector(827.033, 949.432, 324.904)
+    p2_c3 = Vector(872.997, 949.209, 305.227)
+    
+    # Target center from extrude-upto profile (Lower)
+    t2_c1 = Vector(816.055, 949.410, 299.262)
+    t2_c3 = Vector(872.331, 955.983, 303.595)
+
+    p2_center = (p2_c1 + p2_c3) * 0.5
+    t2_center = (t2_c1 + t2_c3) * 0.5
+    
+    p2_xd = (p2_c2 - p2_c1).normalized()
+    p2_yd = (p2_c3 - p2_c2).normalized()
+    p2_zd = p2_xd.cross(p2_yd).normalized()
+
+    pl24_p2 = Plane(origin=p2_center - p2_zd * 1.0, x_dir=p2_xd, z_dir=p2_zd)
+
+    with BuildSketch(pl24_p2):
+        Rectangle(29.0, 52.0)
+        
+    depth2 = (t2_center - p2_center).dot(p2_zd)
+    extrude(amount=depth2 + (2.0 if depth2 > 0 else -2.0), mode=Mode.SUBTRACT)
+
+print(f"  Frame 24 valid={frame24.part.is_valid}, volume={frame24.part.volume:.1f}")
 
 # ══════════════════════════════════════════════════════════════
 # Loft 1: front wall
@@ -3278,6 +3710,2767 @@ def make_loft21():
 loft21 = make_loft21()
 
 # ══════════════════════════════════════════════════════════════
+# Loft 22: Manual Quadrilateral Stitching
+# ══════════════════════════════════════════════════════════════
+print("Building loft 22 (manual)...")
+
+def make_loft22():
+    from OCP.BRepBuilderAPI import (BRepBuilderAPI_Sewing,
+                                     BRepBuilderAPI_MakeSolid,
+                                     BRepBuilderAPI_MakeFace)
+    from OCP.TopoDS import TopoDS
+    from OCP.ShapeFix import ShapeFix_Solid
+
+    def tri(p1, p2, p3):
+        w = Wire.make_polygon([Vector(*p1), Vector(*p2), Vector(*p3)], close=True)
+        return BRepBuilderAPI_MakeFace(w.wrapped).Face()
+
+    # ── Profile A (Upper) ─────────────────────────────────────
+    A1 = (1133.080, 1533.450, 221.156)
+    A2 = (1139.880, 1576.903, 239.056)
+    A3 = (980.134, 1577.956, 297.194)
+    A4 = (973.333, 1534.503, 279.294)
+    # Centroid for fanning end-cap triangles
+    Am = tuple(sum(x)/4 for x in zip(A1, A2, A3, A4))
+
+    # ── Profile B (Lower) ─────────────────────────────────────
+    B1 = (1119.854, 1543.030, 184.642)
+    B2 = (1127.906, 1595.655, 205.815)
+    B3 = (968.160, 1596.708, 263.952)
+    B4 = (960.107, 1544.083, 242.780)
+    # Centroid for fanning end-cap triangles
+    Bm = tuple(sum(x)/4 for x in zip(B1, B2, B3, B4))
+
+    faces = []
+
+    # Source cap - fan from Am (CCW winding)
+    faces += [
+        tri(Am, A2, A1), tri(Am, A3, A2), 
+        tri(Am, A4, A3), tri(Am, A1, A4)
+    ]
+
+    # Target cap - fan from Bm (CW winding)
+    faces += [
+        tri(Bm, B1, B2), tri(Bm, B2, B3), 
+        tri(Bm, B3, B4), tri(Bm, B4, B1)
+    ]
+
+    # Side walls (4 quads split into 2 triangles each)
+    faces += [
+        tri(A1, B2, B1), tri(A1, A2, B2), # Edge 1 wall
+        tri(A2, B3, B2), tri(A2, A3, B3), # Edge 2 wall
+        tri(A3, B4, B3), tri(A3, A4, B4), # Edge 3 wall
+        tri(A4, B1, B4), tri(A4, A1, B1), # Edge 4 wall
+    ]
+
+    def build_solid(face_list):
+        sew = BRepBuilderAPI_Sewing(1e-2)
+        for f in face_list:
+            sew.Add(f)
+        sew.Perform()
+        shell = TopoDS.Shell_s(sew.SewedShape())
+        fix = ShapeFix_Solid()
+        fix.Init(BRepBuilderAPI_MakeSolid(shell).Solid())
+        fix.Perform()
+        return Solid(fix.Solid())
+
+    s = build_solid(faces)
+
+    if s.is_valid and s.volume > 0:
+        print(f"  loft22 OK: vol={s.volume:.1f}")
+        return s
+
+    # Orientation logic
+    print("    Volume negative — reversing cap windings...")
+    faces_r = [tri(Am, A1, A2), tri(Am, A2, A3), tri(Am, A3, A4), tri(Am, A4, A1)]
+    faces_r += [tri(Bm, B2, B1), tri(Bm, B3, B2), tri(Bm, B4, B3), tri(Bm, B1, B4)]
+    faces_r += faces[8:]
+    
+    s = build_solid(faces_r)
+    if s.is_valid and s.volume > 0:
+        print(f"  loft22 OK: vol={s.volume:.1f}")
+        return s
+
+    raise ValueError("make_loft22 failed — verify coordinate sequential order")
+
+loft22 = make_loft22()
+
+# ══════════════════════════════════════════════════════════════
+# Loft 23: Manual Quadrilateral Stitching
+# ══════════════════════════════════════════════════════════════
+print("Building loft 23 (manual)...")
+
+def make_loft23():
+    from OCP.BRepBuilderAPI import (BRepBuilderAPI_Sewing,
+                                     BRepBuilderAPI_MakeSolid,
+                                     BRepBuilderAPI_MakeFace)
+    from OCP.TopoDS import TopoDS
+    from OCP.ShapeFix import ShapeFix_Solid
+
+    def tri(p1, p2, p3):
+        w = Wire.make_polygon([Vector(*p1), Vector(*p2), Vector(*p3)], close=True)
+        return BRepBuilderAPI_MakeFace(w.wrapped).Face()
+
+    # ── Profile A (Upper) ─────────────────────────────────────
+    A1 = (943.905, 1581.423, 311.223) # Top-Left
+    A2 = (980.134, 1577.956, 297.194) # Top-Right
+    A3 = (1010.747, 1741.363, 378.348) # Bottom-Right
+    A4 = (978.443, 1745.191, 390.040) # Bottom-Left
+    # Centroid for fanning end-cap triangles
+    Am = tuple(sum(x)/4 for x in zip(A1, A2, A3, A4))
+
+    # ── Profile B (Lower) ─────────────────────────────────────
+    B1 = (930.046, 1600.028, 278.638) # Top-Left
+    B2 = (968.160, 1596.708, 263.952) # Top-Right
+    B3 = (996.291, 1746.866, 338.527) # Bottom-Right
+    B4 = (961.783, 1750.518, 351.065) # Bottom-Left
+    # Centroid for fanning end-cap triangles
+    Bm = tuple(sum(x)/4 for x in zip(B1, B2, B3, B4))
+
+    faces = []
+
+    # Source cap - fan from Am (CCW winding)
+    faces += [
+        tri(Am, A2, A1), tri(Am, A3, A2), 
+        tri(Am, A4, A3), tri(Am, A1, A4)
+    ]
+
+    # Target cap - fan from Bm (CW winding)
+    faces += [
+        tri(Bm, B1, B2), tri(Bm, B2, B3), 
+        tri(Bm, B3, B4), tri(Bm, B4, B1)
+    ]
+
+    # Side walls (4 quads split into 2 triangles each)
+    faces += [
+        tri(A1, B2, B1), tri(A1, A2, B2), # Top wall
+        tri(A2, B3, B2), tri(A2, A3, B3), # Right wall
+        tri(A3, B4, B3), tri(A3, A4, B4), # Bottom wall
+        tri(A4, B1, B4), tri(A4, A1, B1), # Left wall
+    ]
+
+    def build_solid(face_list):
+        sew = BRepBuilderAPI_Sewing(1e-2)
+        for f in face_list:
+            sew.Add(f)
+        sew.Perform()
+        shell = TopoDS.Shell_s(sew.SewedShape())
+        fix = ShapeFix_Solid()
+        fix.Init(BRepBuilderAPI_MakeSolid(shell).Solid())
+        fix.Perform()
+        return Solid(fix.Solid())
+
+    s = build_solid(faces)
+
+    if s.is_valid and s.volume > 0:
+        print(f"  loft23 OK: vol={s.volume:.1f}")
+        return s
+
+    # Orientation logic
+    print("    Volume negative — reversing cap windings...")
+    faces_r = [tri(Am, A1, A2), tri(Am, A2, A3), tri(Am, A3, A4), tri(Am, A4, A1)]
+    faces_r += [tri(Bm, B2, B1), tri(Bm, B3, B2), tri(Bm, B4, B3), tri(Bm, B1, B4)]
+    faces_r += faces[8:]
+    
+    s = build_solid(faces_r)
+    if s.is_valid and s.volume > 0:
+        print(f"  loft23 OK: vol={s.volume:.1f}")
+        return s
+
+    raise ValueError("make_loft23 failed — check vertex sequential alignment")
+
+loft23 = make_loft23()
+
+# ══════════════════════════════════════════════════════════════
+# Loft 24: Manual Quadrilateral Stitching
+# ══════════════════════════════════════════════════════════════
+print("Building loft 24 (manual)...")
+
+def make_loft24():
+    from OCP.BRepBuilderAPI import (BRepBuilderAPI_Sewing,
+                                     BRepBuilderAPI_MakeSolid,
+                                     BRepBuilderAPI_MakeFace)
+    from OCP.TopoDS import TopoDS
+    from OCP.ShapeFix import ShapeFix_Solid
+
+    def tri(p1, p2, p3):
+        w = Wire.make_polygon([Vector(*p1), Vector(*p2), Vector(*p3)], close=True)
+        return BRepBuilderAPI_MakeFace(w.wrapped).Face()
+
+    # ── Profile A (Upper) ─────────────────────────────────────
+    A1 = (936.262, 1537.890, 293.865) # Top-Left
+    A2 = (973.333, 1534.503, 279.294) # Top-Right
+    A3 = (980.134, 1577.956, 297.194) # Bottom-Right
+    A4 = (943.905, 1581.423, 311.223) # Bottom-Left
+    # Centroid for fanning end-cap triangles
+    Am = tuple(sum(x)/4 for x in zip(A1, A2, A3, A4))
+
+    # ── Profile B (Lower) ─────────────────────────────────────
+    B1 = (921.001, 1547.309, 258.110) # Top-Left
+    B2 = (960.107, 1544.083, 242.780) # Top-Right
+    B3 = (968.160, 1596.708, 263.952) # Bottom-Right
+    B4 = (930.046, 1600.028, 278.638) # Bottom-Left
+    # Centroid for fanning end-cap triangles
+    Bm = tuple(sum(x)/4 for x in zip(B1, B2, B3, B4))
+
+    faces = []
+
+    # Source cap - fan from Am (CCW winding)
+    faces += [
+        tri(Am, A2, A1), tri(Am, A3, A2), 
+        tri(Am, A4, A3), tri(Am, A1, A4)
+    ]
+
+    # Target cap - fan from Bm (CW winding)
+    faces += [
+        tri(Bm, B1, B2), tri(Bm, B2, B3), 
+        tri(Bm, B3, B4), tri(Bm, B4, B1)
+    ]
+
+    # Side walls (4 quads split into 2 triangles each)
+    faces += [
+        tri(A1, B2, B1), tri(A1, A2, B2), # Top wall
+        tri(A2, B3, B2), tri(A2, A3, B3), # Right wall
+        tri(A3, B4, B3), tri(A3, A4, B4), # Bottom wall
+        tri(A4, B1, B4), tri(A4, A1, B1), # Left wall
+    ]
+
+    def build_solid(face_list):
+        sew = BRepBuilderAPI_Sewing(1e-2)
+        for f in face_list:
+            sew.Add(f)
+        sew.Perform()
+        shell = TopoDS.Shell_s(sew.SewedShape())
+        fix = ShapeFix_Solid()
+        fix.Init(BRepBuilderAPI_MakeSolid(shell).Solid())
+        fix.Perform()
+        return Solid(fix.Solid())
+
+    s = build_solid(faces)
+
+    if s.is_valid and s.volume > 0:
+        print(f"  loft24 OK: vol={s.volume:.1f}")
+        return s
+
+    # Orientation Flip Logic
+    print("    Volume negative — reversing cap windings...")
+    faces_r = [tri(Am, A1, A2), tri(Am, A2, A3), tri(Am, A3, A4), tri(Am, A4, A1)]
+    faces_r += [tri(Bm, B2, B1), tri(Bm, B3, B2), tri(Bm, B4, B3), tri(Bm, B1, B4)]
+    faces_r += faces[8:] # Keep original side wall winding
+    
+    s = build_solid(faces_r)
+    if s.is_valid and s.volume > 0:
+        print(f"  loft24 OK: vol={s.volume:.1f}")
+        return s
+
+    raise ValueError("make_loft24 failed — check vertex sequential order")
+
+loft24 = make_loft24()
+
+# ══════════════════════════════════════════════════════════════
+# Loft 25: Manual Quadrilateral Stitching
+# ══════════════════════════════════════════════════════════════
+print("Building loft 25 (manual)...")
+
+def make_loft25():
+    from OCP.BRepBuilderAPI import (BRepBuilderAPI_Sewing,
+                                     BRepBuilderAPI_MakeSolid,
+                                     BRepBuilderAPI_MakeFace)
+    from OCP.TopoDS import TopoDS
+    from OCP.ShapeFix import ShapeFix_Solid
+
+    def tri(p1, p2, p3):
+        w = Wire.make_polygon([Vector(*p1), Vector(*p2), Vector(*p3)], close=True)
+        return BRepBuilderAPI_MakeFace(w.wrapped).Face()
+
+    # ── Profile A (Upper) ─────────────────────────────────────
+    A1 = (919.830, 1372.672, 257.358) # Top-Left
+    A2 = (958.448, 1369.454, 241.383) # Top-Right
+    A3 = (973.333, 1534.503, 279.294) # Bottom-Right
+    A4 = (936.262, 1537.890, 293.865) # Bottom-Left
+    # Centroid for end-cap fanning
+    Am = tuple(sum(x)/4 for x in zip(A1, A2, A3, A4))
+
+    # ── Profile B (Lower) ─────────────────────────────────────
+    B1 = (904.569, 1382.090, 221.603) # Top-Left
+    B2 = (945.222, 1379.034, 204.869) # Top-Right
+    B3 = (960.107, 1544.083, 242.780) # Bottom-Right
+    B4 = (921.001, 1547.309, 258.110) # Bottom-Left
+    # Centroid for end-cap fanning
+    Bm = tuple(sum(x)/4 for x in zip(B1, B2, B3, B4))
+
+    faces = []
+
+    # Source cap - fan from Am (CCW winding)
+    faces += [
+        tri(Am, A2, A1), tri(Am, A3, A2), 
+        tri(Am, A4, A3), tri(Am, A1, A4)
+    ]
+
+    # Target cap - fan from Bm (CW winding)
+    faces += [
+        tri(Bm, B1, B2), tri(Bm, B2, B3), 
+        tri(Bm, B3, B4), tri(Bm, B4, B1)
+    ]
+
+    # Side walls (4 quads split into 2 triangles each)
+    faces += [
+        tri(A1, B2, B1), tri(A1, A2, B2), # Top wall
+        tri(A2, B3, B2), tri(A2, A3, B3), # Right wall
+        tri(A3, B4, B3), tri(A3, A4, B4), # Bottom wall
+        tri(A4, B1, B4), tri(A4, A1, B1), # Left wall
+    ]
+
+    def build_solid(face_list):
+        sew = BRepBuilderAPI_Sewing(1e-2)
+        for f in face_list:
+            sew.Add(f)
+        sew.Perform()
+        shell = TopoDS.Shell_s(sew.SewedShape())
+        fix = ShapeFix_Solid()
+        fix.Init(BRepBuilderAPI_MakeSolid(shell).Solid())
+        fix.Perform()
+        return Solid(fix.Solid())
+
+    s = build_solid(faces)
+
+    if s.is_valid and s.volume > 0:
+        print(f"  loft25 OK: vol={s.volume:.1f}")
+        return s
+
+    # Orientation Flip Logic
+    print("    Volume negative — reversing cap windings...")
+    faces_r = [tri(Am, A1, A2), tri(Am, A2, A3), tri(Am, A3, A4), tri(Am, A4, A1)]
+    faces_r += [tri(Bm, B2, B1), tri(Bm, B3, B2), tri(Bm, B4, B3), tri(Bm, B1, B4)]
+    faces_r += faces[8:] 
+    
+    s = build_solid(faces_r)
+    if s.is_valid and s.volume > 0:
+        print(f"  loft25 OK: vol={s.volume:.1f}")
+        return s
+
+    raise ValueError("make_loft25 failed — check coordinate sequential order")
+
+loft25 = make_loft25()
+
+# ══════════════════════════════════════════════════════════════
+# Loft 26: Manual Quadrilateral Stitching
+# ══════════════════════════════════════════════════════════════
+print("Building loft 26 (manual)...")
+
+def make_loft26():
+    from OCP.BRepBuilderAPI import (BRepBuilderAPI_Sewing,
+                                     BRepBuilderAPI_MakeSolid,
+                                     BRepBuilderAPI_MakeFace)
+    from OCP.TopoDS import TopoDS
+    from OCP.ShapeFix import ShapeFix_Solid
+
+    def tri(p1, p2, p3):
+        w = Wire.make_polygon([Vector(*p1), Vector(*p2), Vector(*p3)], close=True)
+        return BRepBuilderAPI_MakeFace(w.wrapped).Face()
+
+    # ── Profile A (Upper) ─────────────────────────────────────
+    A1 = (916.573, 1325.830, 250.280) # Top-Left
+    A2 = (955.445, 1322.646, 233.981) # Top-Right
+    A3 = (958.448, 1369.454, 241.383) # Bottom-Right
+    A4 = (919.830, 1372.672, 257.358) # Bottom-Left
+    # Centroid for end-cap fanning
+    Am = tuple(sum(x)/4 for x in zip(A1, A2, A3, A4))
+
+    # ── Profile B (Lower) ─────────────────────────────────────
+    B1 = (900.830, 1325.494, 213.510) # Top-Left
+    B2 = (941.764, 1322.476, 196.393) # Top-Right
+    B3 = (945.222, 1379.034, 204.869) # Bottom-Right
+    B4 = (904.569, 1382.090, 221.603) # Bottom-Left
+    # Centroid for end-cap fanning
+    Bm = tuple(sum(x)/4 for x in zip(B1, B2, B3, B4))
+
+    faces = []
+
+    # Source cap - fan from Am (CCW winding)
+    faces += [
+        tri(Am, A2, A1), tri(Am, A3, A2), 
+        tri(Am, A4, A3), tri(Am, A1, A4)
+    ]
+
+    # Target cap - fan from Bm (CW winding)
+    faces += [
+        tri(Bm, B1, B2), tri(Bm, B2, B3), 
+        tri(Bm, B3, B4), tri(Bm, B4, B1)
+    ]
+
+    # Side walls (4 quads split into 2 triangles each)
+    faces += [
+        tri(A1, B2, B1), tri(A1, A2, B2), # Top wall
+        tri(A2, B3, B2), tri(A2, A3, B3), # Right wall
+        tri(A3, B4, B3), tri(A3, A4, B4), # Bottom wall
+        tri(A4, B1, B4), tri(A4, A1, B1), # Left wall
+    ]
+
+    def build_solid(face_list):
+        sew = BRepBuilderAPI_Sewing(1e-2)
+        for f in face_list:
+            sew.Add(f)
+        sew.Perform()
+        shell = TopoDS.Shell_s(sew.SewedShape())
+        fix = ShapeFix_Solid()
+        fix.Init(BRepBuilderAPI_MakeSolid(shell).Solid())
+        fix.Perform()
+        return Solid(fix.Solid())
+
+    s = build_solid(faces)
+
+    if s.is_valid and s.volume > 0:
+        print(f"  loft26 OK: vol={s.volume:.1f}")
+        return s
+
+    # Orientation Flip Logic
+    print("    Volume negative — reversing cap windings...")
+    faces_r = [tri(Am, A1, A2), tri(Am, A2, A3), tri(Am, A3, A4), tri(Am, A4, A1)]
+    faces_r += [tri(Bm, B2, B1), tri(Bm, B3, B2), tri(Bm, B4, B3), tri(Bm, B1, B4)]
+    faces_r += faces[8:] 
+    
+    s = build_solid(faces_r)
+    if s.is_valid and s.volume > 0:
+        print(f"  loft26 OK: vol={s.volume:.1f}")
+        return s
+
+    raise ValueError("make_loft26 failed — check coordinate sequential order")
+
+loft26 = make_loft26()
+
+# ══════════════════════════════════════════════════════════════
+# Loft 27: Manual Quadrilateral Stitching
+# ══════════════════════════════════════════════════════════════
+print("Building loft 27 (manual)...")
+
+def make_loft27():
+    from OCP.BRepBuilderAPI import (BRepBuilderAPI_Sewing,
+                                     BRepBuilderAPI_MakeSolid,
+                                     BRepBuilderAPI_MakeFace)
+    from OCP.TopoDS import TopoDS
+    from OCP.ShapeFix import ShapeFix_Solid
+
+    def tri(p1, p2, p3):
+        w = Wire.make_polygon([Vector(*p1), Vector(*p2), Vector(*p3)], close=True)
+        return BRepBuilderAPI_MakeFace(w.wrapped).Face()
+
+    # ── Profile A (Upper) ─────────────────────────────────────
+    A1 = (916.436, 1155.838, 251.892) # Top-Left
+    A2 = (954.701, 1152.651, 235.018) # Top-Right
+    A3 = (955.445, 1322.646, 233.981) # Bottom-Right
+    A4 = (916.573, 1325.830, 250.280) # Bottom-Left
+    # Centroid for fanning end-cap triangles
+    Am = tuple(sum(x)/4 for x in zip(A1, A2, A3, A4))
+
+    # ── Profile B (Lower) ─────────────────────────────────────
+    B1 = (900.693, 1155.502, 215.122) # Top-Left
+    B2 = (941.021, 1152.481, 197.430) # Top-Right
+    B3 = (941.764, 1322.476, 196.393) # Bottom-Right
+    B4 = (900.830, 1325.494, 213.510) # Bottom-Left
+    # Centroid for fanning end-cap triangles
+    Bm = tuple(sum(x)/4 for x in zip(B1, B2, B3, B4))
+
+    faces = []
+
+    # Source cap - fan from Am (CCW winding)
+    faces += [
+        tri(Am, A2, A1), tri(Am, A3, A2), 
+        tri(Am, A4, A3), tri(Am, A1, A4)
+    ]
+
+    # Target cap - fan from Bm (CW winding)
+    faces += [
+        tri(Bm, B1, B2), tri(Bm, B2, B3), 
+        tri(Bm, B3, B4), tri(Bm, B4, B1)
+    ]
+
+    # Side walls (4 quads split into 2 triangles each)
+    faces += [
+        tri(A1, B2, B1), tri(A1, A2, B2), # Top wall
+        tri(A2, B3, B2), tri(A2, A3, B3), # Right wall
+        tri(A3, B4, B3), tri(A3, A4, B4), # Bottom wall
+        tri(A4, B1, B4), tri(A4, A1, B1), # Left wall
+    ]
+
+    def build_solid(face_list):
+        sew = BRepBuilderAPI_Sewing(1e-2)
+        for f in face_list:
+            sew.Add(f)
+        sew.Perform()
+        shell = TopoDS.Shell_s(sew.SewedShape())
+        fix = ShapeFix_Solid()
+        fix.Init(BRepBuilderAPI_MakeSolid(shell).Solid())
+        fix.Perform()
+        return Solid(fix.Solid())
+
+    s = build_solid(faces)
+
+    if s.is_valid and s.volume > 0:
+        print(f"  loft27 OK: vol={s.volume:.1f}")
+        return s
+
+    # Orientation Flip Logic
+    print("    Volume negative — reversing cap windings...")
+    faces_r = [tri(Am, A1, A2), tri(Am, A2, A3), tri(Am, A3, A4), tri(Am, A4, A1)]
+    faces_r += [tri(Bm, B2, B1), tri(Bm, B3, B2), tri(Bm, B4, B3), tri(Bm, B1, B4)]
+    faces_r += faces[8:] 
+    
+    s = build_solid(faces_r)
+    if s.is_valid and s.volume > 0:
+        print(f"  loft27 OK: vol={s.volume:.1f}")
+        return s
+
+    raise ValueError("make_loft27 failed — check vertex sequential alignment")
+
+loft27 = make_loft27()
+
+# ══════════════════════════════════════════════════════════════
+# Loft 28: Manual Quadrilateral Stitching
+# ══════════════════════════════════════════════════════════════
+print("Building loft 28 (manual)...")
+
+def make_loft28():
+    from OCP.BRepBuilderAPI import (BRepBuilderAPI_Sewing,
+                                     BRepBuilderAPI_MakeSolid,
+                                     BRepBuilderAPI_MakeFace)
+    from OCP.TopoDS import TopoDS
+    from OCP.ShapeFix import ShapeFix_Solid
+
+    def tri(p1, p2, p3):
+        w = Wire.make_polygon([Vector(*p1), Vector(*p2), Vector(*p3)], close=True)
+        return BRepBuilderAPI_MakeFace(w.wrapped).Face()
+
+    # ── Profile A (Upper) ─────────────────────────────────────
+    A1 = (916.436, 1155.838, 251.892) # Top-Left
+    A2 = (954.701, 1152.651, 235.018) # Top-Right
+    A3 = (955.678, 1105.308, 238.558) # Bottom-Right
+    A4 = (917.760, 1108.510, 255.522) # Bottom-Left
+    # Centroid for fanning end-cap triangles
+    Am = tuple(sum(x)/4 for x in zip(A1, A2, A3, A4))
+
+    # ── Profile B (Lower) ─────────────────────────────────────
+    B1 = (900.693, 1155.502, 215.122) # Top-Left
+    B2 = (941.021, 1152.481, 197.430) # Top-Right
+    B3 = (942.366, 1095.399, 202.162) # Bottom-Right
+    B4 = (902.484, 1098.440, 219.952) # Bottom-Left
+    # Centroid for fanning end-cap triangles
+    Bm = tuple(sum(x)/4 for x in zip(B1, B2, B3, B4))
+
+    faces = []
+
+    # Source cap - fan from Am (CCW winding)
+    faces += [
+        tri(Am, A2, A1), tri(Am, A3, A2), 
+        tri(Am, A4, A3), tri(Am, A1, A4)
+    ]
+
+    # Target cap - fan from Bm (CW winding)
+    faces += [
+        tri(Bm, B1, B2), tri(Bm, B2, B3), 
+        tri(Bm, B3, B4), tri(Bm, B4, B1)
+    ]
+
+    # Side walls (4 quads split into 2 triangles each)
+    faces += [
+        tri(A1, B2, B1), tri(A1, A2, B2), # Top wall
+        tri(A2, B3, B2), tri(A2, A3, B3), # Right wall
+        tri(A3, B4, B3), tri(A3, A4, B4), # Bottom wall
+        tri(A4, B1, B4), tri(A4, A1, B1), # Left wall
+    ]
+
+    def build_solid(face_list):
+        sew = BRepBuilderAPI_Sewing(1e-2)
+        for f in face_list:
+            sew.Add(f)
+        sew.Perform()
+        shell = TopoDS.Shell_s(sew.SewedShape())
+        fix = ShapeFix_Solid()
+        fix.Init(BRepBuilderAPI_MakeSolid(shell).Solid())
+        fix.Perform()
+        return Solid(fix.Solid())
+
+    s = build_solid(faces)
+
+    if s.is_valid and s.volume > 0:
+        print(f"  loft28 OK: vol={s.volume:.1f}")
+        return s
+
+    # Orientation Flip Logic
+    print("    Volume negative — reversing cap windings...")
+    faces_r = [tri(Am, A1, A2), tri(Am, A2, A3), tri(Am, A3, A4), tri(Am, A4, A1)]
+    faces_r += [tri(Bm, B2, B1), tri(Bm, B3, B2), tri(Bm, B4, B3), tri(Bm, B1, B4)]
+    faces_r += faces[8:] 
+    
+    s = build_solid(faces_r)
+    if s.is_valid and s.volume > 0:
+        print(f"  loft28 OK: vol={s.volume:.1f}")
+        return s
+
+    raise ValueError("make_loft28 failed — verify vertex sequential alignment")
+
+loft28 = make_loft28()
+
+# ══════════════════════════════════════════════════════════════
+# Loft 29: Manual Quadrilateral Stitching
+# ══════════════════════════════════════════════════════════════
+print("Building loft 29 (manual)...")
+
+def make_loft29():
+    from OCP.BRepBuilderAPI import (BRepBuilderAPI_Sewing,
+                                     BRepBuilderAPI_MakeSolid,
+                                     BRepBuilderAPI_MakeFace)
+    from OCP.TopoDS import TopoDS
+    from OCP.ShapeFix import ShapeFix_Solid
+
+    def tri(p1, p2, p3):
+        w = Wire.make_polygon([Vector(*p1), Vector(*p2), Vector(*p3)], close=True)
+        return BRepBuilderAPI_MakeFace(w.wrapped).Face()
+
+    # ── Profile A (Upper) ─────────────────────────────────────
+    A1 = (917.760, 1108.510, 255.522) # Top-Left
+    A2 = (955.678, 1105.308, 238.558) # Top-Right
+    A3 = (970.307,  926.077, 282.003) # Bottom-Right
+    A4 = (935.354,  929.471, 298.652) # Bottom-Left
+    # Centroid for fanning end-cap triangles
+    Am = tuple(sum(x)/4 for x in zip(A1, A2, A3, A4))
+
+    # ── Profile B (Lower) ─────────────────────────────────────
+    B1 = (902.484, 1098.440, 219.952) # Top-Left
+    B2 = (942.366, 1095.399, 202.162) # Top-Right
+    B3 = (958.182,  901.637, 249.130) # Bottom-Right
+    B4 = (921.504,  904.884, 266.579) # Bottom-Left
+    # Centroid for fanning end-cap triangles
+    Bm = tuple(sum(x)/4 for x in zip(B1, B2, B3, B4))
+
+    faces = []
+
+    # Source cap - fan from Am (CCW winding)
+    faces += [
+        tri(Am, A2, A1), tri(Am, A3, A2), 
+        tri(Am, A4, A3), tri(Am, A1, A4)
+    ]
+
+    # Target cap - fan from Bm (CW winding)
+    faces += [
+        tri(Bm, B1, B2), tri(Bm, B2, B3), 
+        tri(Bm, B3, B4), tri(Bm, B4, B1)
+    ]
+
+    # Side walls (4 quads split into 2 triangles each)
+    faces += [
+        tri(A1, B2, B1), tri(A1, A2, B2), # Top wall
+        tri(A2, B3, B2), tri(A2, A3, B3), # Right wall
+        tri(A3, B4, B3), tri(A3, A4, B4), # Bottom wall
+        tri(A4, B1, B4), tri(A4, A1, B1), # Left wall
+    ]
+
+    def build_solid(face_list):
+        sew = BRepBuilderAPI_Sewing(1e-2)
+        for f in face_list:
+            sew.Add(f)
+        sew.Perform()
+        shell = TopoDS.Shell_s(sew.SewedShape())
+        fix = ShapeFix_Solid()
+        fix.Init(BRepBuilderAPI_MakeSolid(shell).Solid())
+        fix.Perform()
+        return Solid(fix.Solid())
+
+    s = build_solid(faces)
+
+    if s.is_valid and s.volume > 0:
+        print(f"  loft29 OK: vol={s.volume:.1f}")
+        return s
+
+    # Orientation Flip Logic
+    print("    Volume negative — reversing cap windings...")
+    faces_r = [tri(Am, A1, A2), tri(Am, A2, A3), tri(Am, A3, A4), tri(Am, A4, A1)]
+    faces_r += [tri(Bm, B2, B1), tri(Bm, B3, B2), tri(Bm, B4, B3), tri(Bm, B1, B4)]
+    faces_r += faces[8:] 
+    
+    s = build_solid(faces_r)
+    if s.is_valid and s.volume > 0:
+        print(f"  loft29 OK: vol={s.volume:.1f}")
+        return s
+
+    raise ValueError("make_loft29 failed — verify vertex sequential alignment")
+
+loft29 = make_loft29()
+
+# ══════════════════════════════════════════════════════════════
+# Loft 30: Manual Quadrilateral Stitching (Fallback for non-planar twist)
+# ══════════════════════════════════════════════════════════════
+print("Building loft 30 (manual)...")
+
+def make_loft30():
+    from OCP.BRepBuilderAPI import (BRepBuilderAPI_Sewing,
+                                     BRepBuilderAPI_MakeSolid,
+                                     BRepBuilderAPI_MakeFace)
+    from OCP.TopoDS import TopoDS
+    from OCP.ShapeFix import ShapeFix_Solid
+
+    def tri(p1, p2, p3):
+        w = Wire.make_polygon([Vector(*p1), Vector(*p2), Vector(*p3)], close=True)
+        return BRepBuilderAPI_MakeFace(w.wrapped).Face()
+
+    # ── Profile A (Upper) ─────────────────────────────────────
+    A1 = (773.836, 1582.250, 384.030) # Top-Left
+    A2 = (943.905, 1581.423, 311.223) # Top-Right
+    A3 = (936.262, 1537.890, 293.865) # Bottom-Right
+    A4 = (766.193, 1538.717, 366.672) # Bottom-Left
+    # Centroid for fanning end-cap triangles
+    Am = tuple(sum(x)/4 for x in zip(A1, A2, A3, A4))
+
+    # ── Profile B (Lower) ─────────────────────────────────────
+    B1 = (722.160, 1601.039, 367.635) # Top-Left
+    B2 = (930.046, 1600.028, 278.638) # Top-Right
+    B3 = (921.001, 1547.309, 258.110) # Bottom-Right
+    B4 = (718.504, 1548.293, 344.800) # Bottom-Left
+    # Centroid for fanning end-cap triangles
+    Bm = tuple(sum(x)/4 for x in zip(B1, B2, B3, B4))
+
+    faces = []
+
+    # Source cap - fan from Am (CCW winding)
+    faces += [
+        tri(Am, A2, A1), tri(Am, A3, A2), 
+        tri(Am, A4, A3), tri(Am, A1, A4)
+    ]
+
+    # Target cap - fan from Bm (CW winding)
+    faces += [
+        tri(Bm, B1, B2), tri(Bm, B2, B3), 
+        tri(Bm, B3, B4), tri(Bm, B4, B1)
+    ]
+
+    # Side walls (4 quads split into 2 triangles each)
+    faces += [
+        tri(A1, B2, B1), tri(A1, A2, B2), # Top wall
+        tri(A2, B3, B2), tri(A2, A3, B3), # Right wall
+        tri(A3, B4, B3), tri(A3, A4, B4), # Bottom wall
+        tri(A4, B1, B4), tri(A4, A1, B1), # Left wall (Edge 4)
+    ]
+
+    def build_solid(face_list):
+        sew = BRepBuilderAPI_Sewing(1e-2)
+        for f in face_list:
+            sew.Add(f)
+        sew.Perform()
+        shell = TopoDS.Shell_s(sew.SewedShape())
+        fix = ShapeFix_Solid()
+        fix.Init(BRepBuilderAPI_MakeSolid(shell).Solid())
+        fix.Perform()
+        return Solid(fix.Solid())
+
+    s = build_solid(faces)
+
+    if s.is_valid and s.volume > 0:
+        print(f"  loft30 OK: vol={s.volume:.1f}")
+        return s
+
+    # Orientation Flip Logic
+    print("    Volume negative — reversing cap windings...")
+    faces_r = [tri(Am, A1, A2), tri(Am, A2, A3), tri(Am, A3, A4), tri(Am, A4, A1)]
+    faces_r += [tri(Bm, B2, B1), tri(Bm, B3, B2), tri(Bm, B4, B3), tri(Bm, B1, B4)]
+    faces_r += faces[8:] 
+    
+    s = build_solid(faces_r)
+    if s.is_valid and s.volume > 0:
+        print(f"  loft30 OK: vol={s.volume:.1f}")
+        return s
+
+    raise ValueError("make_loft30 failed — verify vertex sequential alignment")
+
+loft30 = make_loft30()
+
+# ══════════════════════════════════════════════════════════════
+# Loft 31: Manual Quadrilateral Stitching
+# ══════════════════════════════════════════════════════════════
+print("Building loft 31 (manual)...")
+
+def make_loft31():
+    from OCP.BRepBuilderAPI import (BRepBuilderAPI_Sewing,
+                                     BRepBuilderAPI_MakeSolid,
+                                     BRepBuilderAPI_MakeFace)
+    from OCP.TopoDS import TopoDS
+    from OCP.ShapeFix import ShapeFix_Solid
+
+    def tri(p1, p2, p3):
+        w = Wire.make_polygon([Vector(*p1), Vector(*p2), Vector(*p3)], close=True)
+        return BRepBuilderAPI_MakeFace(w.wrapped).Face()
+
+    # ── Profile A (Upper Profile) ─────────────────────────────
+    # These match the "Source" coordinates you provided
+    A1 = (749.761, 1373.498, 330.165) # Top-Left
+    A2 = (919.830, 1372.672, 257.358) # Top-Right
+    A3 = (916.573, 1325.830, 250.280) # Bottom-Right
+    A4 = (746.504, 1326.657, 323.088) # Bottom-Left
+    Am = tuple(sum(x)/4 for x in zip(A1, A2, A3, A4))
+
+    # ── Profile B (Lower Profile) ─────────────────────────────
+    # These are mapped to the "extrude upto" target to create 3D volume
+    B1 = (716.140, 1383.006, 302.270) 
+    B2 = (904.569, 1382.090, 221.603)
+    B3 = (900.830, 1325.494, 213.510)
+    B4 = (712.401, 1326.410, 294.177)
+    Bm = tuple(sum(x)/4 for x in zip(B1, B2, B3, B4))
+
+    faces = []
+
+    # Source cap - fan from Am (CCW winding)
+    faces += [
+        tri(Am, A2, A1), tri(Am, A3, A2), 
+        tri(Am, A4, A3), tri(Am, A1, A4)
+    ]
+
+    # Target cap - fan from Bm (CW winding)
+    faces += [
+        tri(Bm, B1, B2), tri(Bm, B2, B3), 
+        tri(Bm, B3, B4), tri(Bm, B4, B1)
+    ]
+
+    # Side walls (4 quads split into 2 triangles each)
+    # This follows the exact P1->Q2->Q1 and P1->P2->Q2 pattern in your script
+    faces += [
+        tri(A1, B2, B1), tri(A1, A2, B2), # Top wall
+        tri(A2, B3, B2), tri(A2, A3, B3), # Right wall
+        tri(A3, B4, B3), tri(A3, A4, B4), # Bottom wall
+        tri(A4, B1, B4), tri(A4, A1, B1), # Left wall
+    ]
+
+    def build_solid(face_list):
+        sew = BRepBuilderAPI_Sewing(1e-2)
+        for f in face_list:
+            sew.Add(f)
+        sew.Perform()
+        shell = TopoDS.Shell_s(sew.SewedShape())
+        fix = ShapeFix_Solid()
+        fix.Init(BRepBuilderAPI_MakeSolid(shell).Solid())
+        fix.Perform()
+        return Solid(fix.Solid())
+
+    s = build_solid(faces)
+
+    if s.is_valid and s.volume > 0:
+        print(f"  loft31 OK: vol={s.volume:.1f}")
+        return s
+
+    # Orientation Flip Logic (Silent fallback from your original script)
+    print("    Volume negative — reversing cap windings...")
+    faces_r = [tri(Am, A1, A2), tri(Am, A2, A3), tri(Am, A3, A4), tri(Am, A4, A1)]
+    faces_r += [tri(Bm, B2, B1), tri(Bm, B3, B2), tri(Bm, B4, B3), tri(Bm, B1, B4)]
+    faces_r += faces[8:] 
+    
+    s = build_solid(faces_r)
+    if s.is_valid and s.volume > 0:
+        print(f"  loft31 OK: vol={s.volume:.1f}")
+        return s
+
+    return s
+
+loft31 = make_loft31()
+
+# ══════════════════════════════════════════════════════════════
+# Loft 32: Manual Quadrilateral Stitching
+# ══════════════════════════════════════════════════════════════
+print("Building loft 32 (manual)...")
+
+def make_loft32():
+    from OCP.BRepBuilderAPI import (BRepBuilderAPI_Sewing,
+                                     BRepBuilderAPI_MakeSolid,
+                                     BRepBuilderAPI_MakeFace)
+    from OCP.TopoDS import TopoDS
+    from OCP.ShapeFix import ShapeFix_Solid
+
+    def tri(p1, p2, p3):
+        w = Wire.make_polygon([Vector(*p1), Vector(*p2), Vector(*p3)], close=True)
+        return BRepBuilderAPI_MakeFace(w.wrapped).Face()
+
+    # ── Profile A (Upper) ─────────────────────────────────────
+    A1 = (746.367, 1156.665, 324.699) # TL
+    A2 = (916.436, 1155.838, 251.892) # TR
+    A3 = (917.760, 1108.510, 255.522) # BR
+    A4 = (747.691, 1109.337, 328.329) # BL
+    Am = tuple(sum(x)/4 for x in zip(A1, A2, A3, A4))
+
+    # ── Profile B (Lower) ─────────────────────────────────────
+    B1 = (716.140, 1156.399, 294.130) # TL
+    B2 = (900.693, 1155.502, 215.122) # TR
+    B3 = (902.484, 1098.440, 219.952) # BR
+    B4 = (716.140, 1099.346, 299.726) # BL
+    Bm = tuple(sum(x)/4 for x in zip(B1, B2, B3, B4))
+
+    faces = []
+    # Source cap (CCW)
+    faces += [tri(Am, A2, A1), tri(Am, A3, A2), tri(Am, A4, A3), tri(Am, A1, A4)]
+    # Target cap (CW)
+    faces += [tri(Bm, B1, B2), tri(Bm, B2, B3), tri(Bm, B3, B4), tri(Bm, B4, B1)]
+    # Side walls
+    faces += [
+        tri(A1, B2, B1), tri(A1, A2, B2), # Top
+        tri(A2, B3, B2), tri(A2, A3, B3), # Right
+        tri(A3, B4, B3), tri(A3, A4, B4), # Bottom
+        tri(A4, B1, B4), tri(A4, A1, B1), # Left
+    ]
+
+    def build_solid(face_list):
+        sew = BRepBuilderAPI_Sewing(1e-2)
+        for f in face_list: sew.Add(f)
+        sew.Perform()
+        shell = TopoDS.Shell_s(sew.SewedShape())
+        fix = ShapeFix_Solid()
+        fix.Init(BRepBuilderAPI_MakeSolid(shell).Solid())
+        fix.Perform()
+        return Solid(fix.Solid())
+
+    s = build_solid(faces)
+    if s.is_valid and s.volume > 0:
+        print(f"  loft32 OK: vol={s.volume:.1f}")
+        return s
+
+    # Orientation Flip fallback
+    faces_r = [tri(Am, A1, A2), tri(Am, A2, A3), tri(Am, A3, A4), tri(Am, A4, A1)]
+    faces_r += [tri(Bm, B2, B1), tri(Bm, B3, B2), tri(Bm, B4, B3), tri(Bm, B1, B4)]
+    faces_r += faces[8:]
+    s = build_solid(faces_r)
+    return s
+
+loft32 = make_loft32()
+
+# ══════════════════════════════════════════════════════════════
+# Loft 33: Frame-5 outer face (quad) → heptagonal profile
+# ══════════════════════════════════════════════════════════════
+#
+# Profile A — Quadrilateral (inner side, frame-5 face)
+#   Vertex correspondence:  A1=D  A2=A  A3=B  A4=C
+#   Edge lengths:  D-A=185mm, A-B=140.8mm, B-C=185mm, C-D=140.4mm
+#
+# Profile B — Heptagon (outer side, loft target)
+#   Vertex correspondence:  B1=E  B2=H  B3=I  B4=J  B5=K  B6=G  B7=F
+#   Edge lengths (going around): E-H=170mm, H-I=43mm, I-J=72mm,
+#                                J-K=34mm, K-G=69mm, G-F=170mm, F-E=141mm
+#
+# Side-wall mapping (how the 4-vertex A is stretched to meet 7-vertex B):
+#   A1(D)  ↔ B1(E)   — bottom-left corners, spatially closest pair
+#   A2(A)  ↔ B2(H)   — upper-left, A:Y=1748 / H:Y=1754
+#   A2→A3 (25%) ↔ B3(I)   — I extends above A in Y (1792 vs 1748)
+#   A2→A3 (50%) ↔ B4(J)
+#   A2→A3 (75%) ↔ B5(K)
+#   A3(B)  ↔ B6(G)   — lower-right, B:Y=1622 / G:Y=1628
+#   A4(C)  ↔ B7(F)   — bottom-right, C==_orig5 / F≈_orig5
+#
+# Construction strategy:
+#   1. Try BRepOffsetAPI_ThruSections (handles different edge counts natively,
+#      tries both wire orderings and ruled/smooth variants).
+#   2. Fallback: Manual triangle sewing — expand Profile A from 4→7 vertices
+#      via linear interpolation along the A2–A3 edge, then stitch 7 aligned
+#      quad strips plus centroid-fan caps on both ends.
+
+print("Building loft 33 (quad→heptagon, Frame-5 outer bridge)...")
+
+def make_loft33():
+    from OCP.BRepOffsetAPI import BRepOffsetAPI_ThruSections
+    from OCP.BRepBuilderAPI import (BRepBuilderAPI_Sewing,
+                                     BRepBuilderAPI_MakeSolid,
+                                     BRepBuilderAPI_MakeFace)
+    from OCP.TopoDS import TopoDS
+    from OCP.ShapeFix import ShapeFix_Solid
+
+    # ── Profile A: Quadrilateral ──────────────────────────────
+    A1 = (1552.55,  1585.437, 150.895)   # D  bottom-left
+    A2 = (1567.978, 1748.461, 236.978)   # A  top-left
+    A3 = (1593.455, 1622.567, 294.696)   # B  top-right
+    A4 = (1585.216, 1460.447, 205.96)    # C  bottom-right  (== _orig5)
+
+    # ── Profile B: Heptagon ───────────────────────────────────
+    B1 = (1546.458, 1604.346, 116.177)   # E  bottom-left
+    B2 = (1560.635, 1754.152, 195.281)   # H  upper-left
+    B3 = (1564.227, 1792.115, 215.327)   # I  topmost
+    B4 = (1577.633, 1727.326, 243.38)    # J  upper-right
+    B5 = (1584.527, 1697.468, 258.591)   # K  right
+    B6 = (1589.471, 1628.691, 252.606)   # G  lower-right
+    B7 = (1581.9,   1479.716, 171.064)   # F  bottom-right
+
+    pts_a = [A1, A2, A3, A4]
+    pts_b = [B1, B2, B3, B4, B5, B6, B7]
+
+    wa = Wire.make_polygon([Vector(*p) for p in pts_a], close=True)
+    wb = Wire.make_polygon([Vector(*p) for p in pts_b], close=True)
+
+    # ── Attempt 1: BRepOffsetAPI_ThruSections ─────────────────
+    # OCC's ThruSections handles wires with different numbers of edges.
+    # We try both wire orderings and ruled/smooth to maximize success rate.
+    for ruled in [False, True]:
+        for w1, w2, label in [(wa, wb, "A→B"), (wb, wa, "B→A")]:
+            try:
+                gen = BRepOffsetAPI_ThruSections(isSolid=True, ruled=ruled)
+                gen.AddWire(w1.wrapped)
+                gen.AddWire(w2.wrapped)
+                gen.Build()
+                s = Solid(gen.Shape())
+                if s.is_valid and s.volume > 0:
+                    print(f"  loft33 ThruSections OK: {label} ruled={ruled} vol={s.volume:.1f}")
+                    return s
+                print(f"  loft33 ThruSections {label} ruled={ruled}: valid={s.is_valid} vol={s.volume:.1f}")
+            except Exception as e:
+                print(f"  loft33 ThruSections {label} ruled={ruled} raised: {e}")
+
+    # ── Attempt 2: Manual triangle sewing ─────────────────────
+    # Expand Profile A (4 verts) → 7 verts by inserting three lerp points
+    # on the A2–A3 edge.  The resulting PA[i] ↔ PB[i] alignment is:
+    #   PA[0]=A1(D),  PA[1]=A2(A),  PA[2]=A2–A3(25%),
+    #   PA[3]=A2–A3(50%), PA[4]=A2–A3(75%), PA[5]=A3(B), PA[6]=A4(C)
+    def lerp(p, q, t):
+        return tuple(p[i] + t * (q[i] - p[i]) for i in range(3))
+
+    PA = [
+        A1,
+        A2,
+        lerp(A2, A3, 0.25),
+        lerp(A2, A3, 0.50),
+        lerp(A2, A3, 0.75),
+        A3,
+        A4,
+    ]
+    PB = [B1, B2, B3, B4, B5, B6, B7]
+
+    def tri(p1, p2, p3):
+        w = Wire.make_polygon([Vector(*p1), Vector(*p2), Vector(*p3)], close=True)
+        return BRepBuilderAPI_MakeFace(w.wrapped).Face()
+
+    Am = tuple(sum(v[i] for v in pts_a) / 4 for i in range(3))
+    Bm = tuple(sum(v[i] for v in pts_b) / 7 for i in range(3))
+
+    def build_solid(cap_a_reversed=False):
+        faces = []
+        cap_a = list(reversed(pts_a)) if cap_a_reversed else pts_a
+        na = len(cap_a)
+
+        # Cap A: centroid-fan, winding chosen by cap_a_reversed
+        if cap_a_reversed:
+            # CW cap (normal points away from B)
+            for i in range(na):
+                faces.append(tri(Am, cap_a[i], cap_a[(i + 1) % na]))
+        else:
+            # CCW cap (normal points away from B)
+            for i in range(na):
+                faces.append(tri(Am, cap_a[(i + 1) % na], cap_a[i]))
+
+        # Cap B: centroid-fan, opposite winding to Cap A
+        if cap_a_reversed:
+            for i in range(7):
+                faces.append(tri(Bm, PB[(i + 1) % 7], PB[i]))
+        else:
+            for i in range(7):
+                faces.append(tri(Bm, PB[i], PB[(i + 1) % 7]))
+
+        # Side walls: 7 quad strips (PA[i]–PA[i+1] ↔ PB[i]–PB[i+1])
+        for i in range(7):
+            j = (i + 1) % 7
+            faces.append(tri(PA[i], PB[j], PB[i]))
+            faces.append(tri(PA[i], PA[j], PB[j]))
+
+        sew = BRepBuilderAPI_Sewing(1e-2)
+        for f in faces:
+            sew.Add(f)
+        sew.Perform()
+
+        try:
+            shell = TopoDS.Shell_s(sew.SewedShape())
+        except Exception as e:
+            print(f"    Shell cast failed (cap_a_rev={cap_a_reversed}): {e}")
+            return None
+
+        fix = ShapeFix_Solid()
+        fix.Init(BRepBuilderAPI_MakeSolid(shell).Solid())
+        fix.Perform()
+        s = Solid(fix.Solid())
+        print(f"    cap_a_rev={cap_a_reversed}: valid={s.is_valid}, vol={s.volume:.1f}")
+        return s if s.is_valid and s.volume > 0 else None
+
+    for rev in [False, True]:
+        result = build_solid(cap_a_reversed=rev)
+        if result is not None:
+            print(f"  loft33 manual OK: vol={result.volume:.1f}")
+            return result
+
+    raise ValueError("loft33: all construction strategies failed — check vertex ordering")
+
+loft33 = make_loft33()
+
+# ══════════════════════════════════════════════════════════════
+# Loft 34: Sliver face (8-gon) → outer hexagon
+# ══════════════════════════════════════════════════════════════
+#
+# Context / shared vertices with loft33
+# ──────────────────────────────────────
+#   Profile A vertex PA  = loft33 Profile A vertex A2 (top-left corner)
+#   Profile A vertex PI  = loft33 Profile A vertex A3 (bottom-right corner)
+#   Profile B vertex Q1  = loft33 Profile B vertex B3 / I
+#   Profile B vertex Q5  = loft33 Profile B vertex B6 / G
+#   Profile B vertex Q6  = loft33 Profile B vertex B4 / J
+#
+# Profile A is a sliver whose closing edge PI→PA (140.8 mm) is the SAME
+# edge as loft33 Profile A's A3–A2 side wall — loft34 is the adjacent face.
+#
+# Profile A — 8-gon (PG and PH were only 1.1 mm apart in the source data
+#   and have been merged into their midpoint PGH to avoid near-degenerate
+#   triangles.  The omitted original vertices were:
+#     PG = (1595.205, 1612.400, 313.109)
+#     PH = (1595.113, 1612.933, 312.144)
+#   merged → PGH ≈ (1595.159, 1612.667, 312.627))
+#
+#   Going around: PA→PB→PC→PD→PE→PF→PGH→PI→(PA)
+#   Perimeter: ~378.7 mm
+#   Both the long arc (PA→…→PI, ~238 mm) and the short closing edge
+#   (PI→PA, 140.8 mm) decrease/increase Y monotonically, matching
+#   Profile B's topology.
+#
+# Profile B — hexagon
+#   Going around: Q1→Q2→Q3→Q4→Q5→Q6→(Q1)
+#   Perimeter: ~475.8 mm
+#
+# Alignment
+# ─────────
+#   Best correspondence (minimises avg cross-profile arc-length distance):
+#     PA  ↔ Q1   (avg 59 mm vs 85 mm for PA↔Q6 alignment)
+#     PI  ↔ Q5   (both are the "lower right" corner)
+#   Long arc  A: PA→PB→PC→PD→PE→PF→PGH→PI   (Y decreasing 1748→1613)
+#   Long side B: Q1→Q2→Q3→Q4→Q5             (Y decreasing 1792→1629)
+#   Short side A: PI→PA                      (Y increasing 1623→1748)
+#   Short side B: Q5→Q6→Q1                  (Y increasing 1629→1792)
+#
+# Construction strategy
+# ─────────────────────
+#   1. BRepOffsetAPI_ThruSections — OCC's native lofter handles unequal
+#      edge counts natively; tries ruled/smooth × A→B/B→A orderings.
+#   2. Arc-length parameterised zipper sewing (fallback) — parameterises
+#      both polygons by cumulative arc-length (t ∈ [0,1]), merges the
+#      t-values from both vertex lists into one shared sample grid, then
+#      interpolates positions on each polygon at every shared t.  The
+#      resulting matched rings are stitched as quad side strips.  All four
+#      winding-direction combinations are tried.
+
+print("Building loft 34 (8-gon → hexagon, sliver bridge)...")
+
+def make_loft34():
+    from OCP.BRepOffsetAPI import BRepOffsetAPI_ThruSections
+    from OCP.BRepBuilderAPI import (BRepBuilderAPI_Sewing,
+                                     BRepBuilderAPI_MakeSolid,
+                                     BRepBuilderAPI_MakeFace)
+    from OCP.TopoDS import TopoDS
+    from OCP.ShapeFix import ShapeFix_Solid
+    import math
+
+    # ── Profile A: 8-gon (PG+PH merged) ─────────────────────
+    _PG  = (1595.205, 1612.400, 313.109)
+    _PH  = (1595.113, 1612.933, 312.144)
+    PGH  = tuple((_PG[i] + _PH[i]) / 2.0 for i in range(3))
+
+    A = [
+        (1567.978, 1748.461, 236.978),   # 0  PA  — shared w/ loft33 A2, also long-arc start
+        (1571.024, 1739.006, 254.337),   # 1  PB
+        (1588.369, 1685.171, 353.182),   # 2  PC  — Z-peak of Profile A
+        (1588.556, 1666.976, 342.905),   # 3  PD
+        (1589.767, 1648.785, 332.801),   # 4  PE
+        (1591.988, 1630.595, 322.869),   # 5  PF
+        PGH,                              # 6  PGH — merged near-degenerate pair
+        (1593.455, 1622.567, 294.696),   # 7  PI  — shared w/ loft33 A3, closing-edge end
+    ]
+
+    # ── Profile B: hexagon ────────────────────────────────────
+    B = [
+        (1564.227, 1792.115, 215.327),   # 0  Q1  — shared w/ loft33 B3/I; long-side start
+        (1581.975, 1787.845, 276.144),   # 1  Q2
+        (1597.362, 1783.965, 337.594),   # 2  Q3  — Z-peak of Profile B
+        (1593.417, 1706.328, 295.100),   # 3  Q4
+        (1589.471, 1628.691, 252.606),   # 4  Q5  — shared w/ loft33 B6/G; long-side end
+        (1577.633, 1727.326, 243.380),   # 5  Q6  — shared w/ loft33 B4/J; short-side mid
+    ]
+
+    wa = Wire.make_polygon([Vector(*p) for p in A], close=True)
+    wb = Wire.make_polygon([Vector(*p) for p in B], close=True)
+
+    # ── Attempt 1: BRepOffsetAPI_ThruSections ────────────────
+    for ruled in [False, True]:
+        for w1, w2, tag in [(wa, wb, 'A→B'), (wb, wa, 'B→A')]:
+            try:
+                gen = BRepOffsetAPI_ThruSections(isSolid=True, ruled=ruled)
+                gen.AddWire(w1.wrapped)
+                gen.AddWire(w2.wrapped)
+                gen.Build()
+                s = Solid(gen.Shape())
+                if s.is_valid and s.volume > 0:
+                    print(f"  loft34 ThruSections OK: {tag} ruled={ruled} vol={s.volume:.1f}")
+                    return s
+                print(f"  loft34 ThruSections {tag} ruled={ruled}: valid={s.is_valid} vol={s.volume:.1f}")
+            except Exception as e:
+                print(f"  loft34 ThruSections {tag} ruled={ruled}: {e}")
+
+    # ── Attempt 2: Arc-length parameterised zipper sewing ────
+    #
+    # Both profiles are parameterised by cumulative arc-length t ∈ [0,1].
+    # The merged t-grid contains every vertex t-value from BOTH polygons,
+    # ensuring that each original vertex appears exactly in the side-wall
+    # mesh and that no quad spans across a vertex kink.
+    #
+    # Alignment: A[0](PA) ↔ B[0](Q1)  — confirmed best by cross-profile
+    # distance analysis (avg 59 mm vs 85 mm for the PA↔Q6 alternative).
+
+    def arc_params(pts):
+        """Return (t_values, total_length) for a closed polygon."""
+        n = len(pts)
+        segs = [
+            math.sqrt(sum((pts[(i + 1) % n][j] - pts[i][j]) ** 2 for j in range(3)))
+            for i in range(n)
+        ]
+        total = sum(segs)
+        t, cum = [], 0.0
+        for s in segs:
+            t.append(cum / total)
+            cum += s
+        return t, total
+
+    def point_at_t(pts, t_vals, t):
+        """Interpolate position on closed polygon at normalised arc-length t."""
+        n = len(pts)
+        t = t % 1.0
+        for i in range(n):
+            t0 = t_vals[i]
+            t1 = t_vals[(i + 1) % n] if i < n - 1 else 1.0
+            if t0 <= t <= t1 + 1e-10:
+                dt = t1 - t0
+                s  = (t - t0) / dt if dt > 1e-12 else 0.0
+                p, q = pts[i], pts[(i + 1) % n]
+                return tuple(p[j] + s * (q[j] - p[j]) for j in range(3))
+        return pts[0]   # t==1.0 wraps to t==0.0
+
+    tA, _ = arc_params(A)
+    tB, _ = arc_params(B)
+
+    # Merged t-grid: a sample exists at every vertex of both polygons
+    all_t = sorted(set(tA + tB))
+
+    ring_A = [point_at_t(A, tA, t) for t in all_t]   # len == len(all_t)
+    ring_B = [point_at_t(B, tB, t) for t in all_t]
+
+    def tri(p1, p2, p3):
+        w = Wire.make_polygon([Vector(*p1), Vector(*p2), Vector(*p3)], close=True)
+        return BRepBuilderAPI_MakeFace(w.wrapped).Face()
+
+    Am = tuple(sum(v[i] for v in A) / len(A) for i in range(3))
+    Bm = tuple(sum(v[i] for v in B) / len(B) for i in range(3))
+
+    def build_solid(rev_a=False, rev_b=False):
+        cap_a = list(reversed(A)) if rev_a else A
+        cap_b = list(reversed(B)) if rev_b else B
+        rA    = list(reversed(ring_A)) if rev_a else ring_A
+        rB    = list(reversed(ring_B)) if rev_b else ring_B
+
+        faces = []
+        na = len(cap_a)
+        nb = len(cap_b)
+
+        # Cap A: centroid fan
+        # CCW winding (normal points outward from A's side)
+        for i in range(na):
+            faces.append(tri(Am, cap_a[(i + 1) % na], cap_a[i]))
+
+        # Cap B: centroid fan, opposite winding to Cap A
+        for i in range(nb):
+            faces.append(tri(Bm, cap_b[i], cap_b[(i + 1) % nb]))
+
+        # Side walls: quad strips over the merged-t rings
+        # Each quad: rA[i]–rA[i+1] (Profile A edge) ↔ rB[i]–rB[i+1] (Profile B edge)
+        n = len(rA)
+        for i in range(n):
+            j = (i + 1) % n
+            faces.append(tri(rA[i], rB[j], rB[i]))
+            faces.append(tri(rA[i], rA[j], rB[j]))
+
+        sew = BRepBuilderAPI_Sewing(1e-2)
+        for f in faces:
+            sew.Add(f)
+        sew.Perform()
+
+        try:
+            shell = TopoDS.Shell_s(sew.SewedShape())
+        except Exception as e:
+            print(f"    Shell cast failed (rev_a={rev_a}, rev_b={rev_b}): {e}")
+            return None
+
+        fix = ShapeFix_Solid()
+        fix.Init(BRepBuilderAPI_MakeSolid(shell).Solid())
+        fix.Perform()
+        s = Solid(fix.Solid())
+        print(f"    rev_a={rev_a}, rev_b={rev_b}: valid={s.is_valid}, vol={s.volume:.1f}")
+        return s if s.is_valid and s.volume > 0 else None
+
+    for ra, rb in [(False, False), (True, False), (False, True), (True, True)]:
+        result = build_solid(rev_a=ra, rev_b=rb)
+        if result is not None:
+            print(f"  loft34 arc-length zipper OK: vol={result.volume:.1f}")
+            return result
+
+    raise ValueError(
+        "loft34: all construction strategies failed — verify vertex order / profile orientation"
+    )
+
+loft34 = make_loft34()
+
+print("Building loft 35...")
+loft35 = make_loft_solid(
+    [(1531.686, 1604.369, 118.782),
+     (1581.9,   1479.716, 171.064),
+     (1546.458, 1604.346, 116.177)],
+    [(1537.778, 1585.46,  153.5),
+     (1585.216, 1460.447, 205.96),
+     (1552.55,  1585.437, 150.895)]
+)
+
+print("Building loft 36...")
+
+def make_loft36():
+    from OCP.BRepOffsetAPI import BRepOffsetAPI_ThruSections
+    from OCP.BRepBuilderAPI import (BRepBuilderAPI_Sewing,
+                                     BRepBuilderAPI_MakeSolid,
+                                     BRepBuilderAPI_MakeFace)
+    from OCP.TopoDS import TopoDS
+    from OCP.ShapeFix import ShapeFix_Solid
+
+    A = [(1537.778, 1585.46,  153.5),
+         (1585.216, 1460.447, 205.96),
+         (1583.394, 1417.279, 186.263),
+         (1534.356, 1542.091, 134.466)]
+
+    B = [(1531.686, 1604.369, 118.782),
+         (1528.307, 1560.566, 100.0),
+         (1527.635, 1551.843,  96.26),
+         (1531.42,  1542.806, 100.0),
+         (1579.744, 1427.428, 147.744),
+         (1581.9,   1479.716, 171.064)]
+
+    wa = Wire.make_polygon([Vector(*p) for p in A], close=True)
+    wb = Wire.make_polygon([Vector(*p) for p in B], close=True)
+
+    for ruled in [False, True]:
+        for w1, w2 in [(wa, wb), (wb, wa)]:
+            try:
+                gen = BRepOffsetAPI_ThruSections(isSolid=True, ruled=ruled)
+                gen.AddWire(w1.wrapped)
+                gen.AddWire(w2.wrapped)
+                gen.Build()
+                s = Solid(gen.Shape())
+                if s.is_valid and s.volume > 0:
+                    print(f"  loft36 OK ruled={ruled} vol={s.volume:.1f}")
+                    return s
+            except Exception as e:
+                print(f"  loft36 ThruSections failed: {e}")
+
+    def tri(p1, p2, p3):
+        w = Wire.make_polygon([Vector(*p1), Vector(*p2), Vector(*p3)], close=True)
+        return BRepBuilderAPI_MakeFace(w.wrapped).Face()
+
+    def lerp(p, q, t):
+        return tuple(p[i] + t*(q[i]-p[i]) for i in range(3))
+
+    # Expand A (4-gon) to 6 by splitting A1→A4 edge into 3 segments
+    # A1↔B1, lerp(1/3)↔B2, lerp(2/3)↔B3, A4↔B4, A3↔B5, A2↔B6
+    PA = [A[0], lerp(A[0], A[3], 1/3), lerp(A[0], A[3], 2/3), A[3], A[2], A[1]]
+    PB = list(B)
+
+    Am = tuple(sum(v[i] for v in A)/4 for i in range(3))
+    Bm = tuple(sum(v[i] for v in B)/6 for i in range(3))
+
+    def build(rev_a=False, rev_b=False):
+        ca = list(reversed(A)) if rev_a else A
+        cb = list(reversed(B)) if rev_b else B
+        rA = list(reversed(PA)) if rev_a else PA
+        rB = list(reversed(PB)) if rev_b else PB
+        faces = []
+        for i in range(4):
+            faces.append(tri(Am, ca[(i+1)%4], ca[i]))
+        for i in range(6):
+            faces.append(tri(Bm, cb[i], cb[(i+1)%6]))
+        for i in range(6):
+            j = (i+1)%6
+            faces.append(tri(rA[i], rB[j], rB[i]))
+            faces.append(tri(rA[i], rA[j], rB[j]))
+        sew = BRepBuilderAPI_Sewing(1e-2)
+        for f in faces: sew.Add(f)
+        sew.Perform()
+        try:
+            shell = TopoDS.Shell_s(sew.SewedShape())
+        except:
+            return None
+        fix = ShapeFix_Solid()
+        fix.Init(BRepBuilderAPI_MakeSolid(shell).Solid())
+        fix.Perform()
+        s = Solid(fix.Solid())
+        print(f"    rev_a={rev_a} rev_b={rev_b}: valid={s.is_valid} vol={s.volume:.1f}")
+        return s if s.is_valid and s.volume > 0 else None
+
+    for ra, rb in [(False,False),(True,False),(False,True),(True,True)]:
+        r = build(ra, rb)
+        if r: return r
+
+    raise ValueError("loft36 failed")
+
+loft36 = make_loft36()
+
+print("Building loft 37...")
+
+def make_loft37():
+    from OCP.BRepOffsetAPI import BRepOffsetAPI_ThruSections
+    from OCP.BRepBuilderAPI import (BRepBuilderAPI_Sewing,
+                                     BRepBuilderAPI_MakeSolid,
+                                     BRepBuilderAPI_MakeFace)
+    from OCP.TopoDS import TopoDS
+    from OCP.ShapeFix import ShapeFix_Solid
+    import math
+
+    A = [
+        (1534.356, 1542.091, 134.466),
+        (1583.394, 1417.279, 186.263),
+        (1579.485, 1252.842, 143.307),
+        (1533.598, 1361.408, 100.0),
+        (1526.914, 1377.221,  93.692),
+        (1528.065, 1402.728, 100.0),
+    ]
+    # B reversed so A[0](top)↔B[0](top), A[1](right)↔B[1](right) etc.
+    B = [
+        (1531.42,  1542.806, 100.0),
+        (1579.744, 1427.428, 147.744),
+        (1575.834, 1262.99,  104.789),
+        (1570.43,  1275.033, 100.0),
+        (1520.193, 1386.974,  55.486),
+        (1527.635, 1551.843,  96.26),
+    ]
+    B_orig = [
+        (1531.42,  1542.806, 100.0),
+        (1527.635, 1551.843,  96.26),
+        (1520.193, 1386.974,  55.486),
+        (1570.43,  1275.033, 100.0),
+        (1575.834, 1262.99,  104.789),
+        (1579.744, 1427.428, 147.744),
+    ]
+
+    # Attempt 1: ThruSections
+    for pts_b in [B, B_orig]:
+        wa = Wire.make_polygon([Vector(*p) for p in A], close=True)
+        wb = Wire.make_polygon([Vector(*p) for p in pts_b], close=True)
+        for ruled in [False, True]:
+            for w1, w2 in [(wa, wb), (wb, wa)]:
+                try:
+                    gen = BRepOffsetAPI_ThruSections(isSolid=True, ruled=ruled)
+                    gen.AddWire(w1.wrapped)
+                    gen.AddWire(w2.wrapped)
+                    gen.Build()
+                    s = Solid(gen.Shape())
+                    if s.is_valid and s.volume > 0:
+                        print(f"  loft37 ThruSections OK ruled={ruled} vol={s.volume:.1f}")
+                        return s
+                except Exception as e:
+                    print(f"  loft37 ThruSections: {e}")
+
+    # Attempt 2: Manual 6-6 stitching
+    def tri(p1, p2, p3):
+        w = Wire.make_polygon([Vector(*p1), Vector(*p2), Vector(*p3)], close=True)
+        return BRepBuilderAPI_MakeFace(w.wrapped).Face()
+
+    Am = tuple(sum(v[i] for v in A)/6 for i in range(3))
+
+    def build(PA, PB, rev_a=False, rev_b=False):
+        Bm = tuple(sum(v[i] for v in PB)/6 for i in range(3))
+        ca = list(reversed(PA)) if rev_a else PA
+        cb = list(reversed(PB)) if rev_b else PB
+        rA = list(reversed(PA)) if rev_a else PA
+        rB = list(reversed(PB)) if rev_b else PB
+        faces = []
+        for i in range(6):
+            faces.append(tri(Am, ca[(i+1)%6], ca[i]))
+        for i in range(6):
+            faces.append(tri(Bm, cb[i], cb[(i+1)%6]))
+        for i in range(6):
+            j = (i+1)%6
+            faces.append(tri(rA[i], rB[j], rB[i]))
+            faces.append(tri(rA[i], rA[j], rB[j]))
+        sew = BRepBuilderAPI_Sewing(1e-2)
+        for f in faces: sew.Add(f)
+        sew.Perform()
+        try:
+            shell = TopoDS.Shell_s(sew.SewedShape())
+        except:
+            return None
+        fix = ShapeFix_Solid()
+        fix.Init(BRepBuilderAPI_MakeSolid(shell).Solid())
+        fix.Perform()
+        s = Solid(fix.Solid())
+        print(f"    rev_a={rev_a} rev_b={rev_b}: valid={s.is_valid} vol={s.volume:.1f}")
+        return s if s.is_valid and s.volume > 0 else None
+
+    for pts_b in [B, B_orig]:
+        for ra, rb in [(False,False),(True,False),(False,True),(True,True)]:
+            r = build(A, pts_b, ra, rb)
+            if r:
+                print(f"  loft37 manual OK vol={r.volume:.1f}")
+                return r
+
+    # Attempt 3: Arc-length zipper (handles mismatched shapes)
+    def arc_params(pts):
+        n = len(pts)
+        segs = [math.sqrt(sum((pts[(i+1)%n][j]-pts[i][j])**2 for j in range(3))) for i in range(n)]
+        total = sum(segs)
+        t, cum = [], 0.0
+        for s in segs:
+            t.append(cum/total)
+            cum += s
+        return t
+
+    def pt_at(pts, ts, t):
+        n = len(pts)
+        t = t % 1.0
+        for i in range(n):
+            t0 = ts[i]
+            t1 = ts[(i+1)%n] if i < n-1 else 1.0
+            if t0 <= t <= t1+1e-10:
+                s = (t-t0)/(t1-t0) if (t1-t0) > 1e-12 else 0.0
+                p, q = pts[i], pts[(i+1)%n]
+                return tuple(p[j]+s*(q[j]-p[j]) for j in range(3))
+        return pts[0]
+
+    for pts_b in [B, B_orig]:
+        tA = arc_params(A)
+        tB = arc_params(pts_b)
+        all_t = sorted(set(tA + tB))
+        rA = [pt_at(A, tA, t) for t in all_t]
+        rB = [pt_at(pts_b, tB, t) for t in all_t]
+        Bm = tuple(sum(v[i] for v in pts_b)/6 for i in range(3))
+
+        def build_zip(rev_a=False, rev_b=False):
+            ca = list(reversed(A)) if rev_a else A
+            cb = list(reversed(pts_b)) if rev_b else pts_b
+            rzA = list(reversed(rA)) if rev_a else rA
+            rzB = list(reversed(rB)) if rev_b else rB
+            faces = []
+            for i in range(6):
+                faces.append(tri(Am, ca[(i+1)%6], ca[i]))
+            for i in range(6):
+                faces.append(tri(Bm, cb[i], cb[(i+1)%6]))
+            n = len(rzA)
+            for i in range(n):
+                j = (i+1)%n
+                faces.append(tri(rzA[i], rzB[j], rzB[i]))
+                faces.append(tri(rzA[i], rzA[j], rzB[j]))
+            sew = BRepBuilderAPI_Sewing(1e-2)
+            for f in faces: sew.Add(f)
+            sew.Perform()
+            try:
+                shell = TopoDS.Shell_s(sew.SewedShape())
+            except:
+                return None
+            fix = ShapeFix_Solid()
+            fix.Init(BRepBuilderAPI_MakeSolid(shell).Solid())
+            fix.Perform()
+            s = Solid(fix.Solid())
+            print(f"    zip rev_a={rev_a} rev_b={rev_b}: valid={s.is_valid} vol={s.volume:.1f}")
+            return s if s.is_valid and s.volume > 0 else None
+
+        for ra, rb in [(False,False),(True,False),(False,True),(True,True)]:
+            r = build_zip(ra, rb)
+            if r:
+                print(f"  loft37 zipper OK vol={r.volume:.1f}")
+                return r
+
+    raise ValueError("loft37 failed")
+
+loft37 = make_loft37()
+
+print("Building loft 38...")
+
+def make_loft38():
+    from OCP.BRepOffsetAPI import BRepOffsetAPI_ThruSections
+    from OCP.BRepBuilderAPI import (BRepBuilderAPI_Sewing,
+                                     BRepBuilderAPI_MakeSolid,
+                                     BRepBuilderAPI_MakeFace)
+    from OCP.TopoDS import TopoDS
+    from OCP.ShapeFix import ShapeFix_Solid
+    import math
+
+    A = [
+        (1526.914, 1377.221,  93.692),
+        (1533.598, 1361.408, 100.0),
+        (1579.485, 1252.842, 143.307),
+        (1578.711, 1206.155, 134.673),
+        (1541.03,  1294.043, 100.0),
+        (1525.422, 1330.448,  85.638),
+    ]
+    B_orig = [
+        (1520.193, 1386.974,  55.486),
+        (1570.43,  1275.033, 100.0),
+        (1575.834, 1262.99,  104.789),
+        (1575.407, 1235.798, 100.0),
+        (1574.947, 1206.572,  94.853),
+        (1518.477, 1330.456,  46.245),
+    ]
+    B_rev = list(reversed(B_orig))
+
+    def tri(p1, p2, p3):
+        w = Wire.make_polygon([Vector(*p1), Vector(*p2), Vector(*p3)], close=True)
+        return BRepBuilderAPI_MakeFace(w.wrapped).Face()
+
+    def arc_params(pts):
+        n = len(pts)
+        segs = [math.sqrt(sum((pts[(i+1)%n][j]-pts[i][j])**2 for j in range(3))) for i in range(n)]
+        total = sum(segs)
+        t, cum = [], 0.0
+        for s in segs:
+            t.append(cum/total)
+            cum += s
+        return t
+
+    def pt_at(pts, ts, t):
+        n = len(pts)
+        t = t % 1.0
+        for i in range(n):
+            t1 = ts[(i+1)%n] if i < n-1 else 1.0
+            if ts[i] <= t <= t1+1e-10:
+                s = (t-ts[i])/(t1-ts[i]) if (t1-ts[i]) > 1e-12 else 0.0
+                p, q = pts[i], pts[(i+1)%n]
+                return tuple(p[j]+s*(q[j]-p[j]) for j in range(3))
+        return pts[0]
+
+    def build(PA, PB, rev_a=False, rev_b=False):
+        Am = tuple(sum(v[i] for v in PA)/len(PA) for i in range(3))
+        Bm = tuple(sum(v[i] for v in PB)/len(PB) for i in range(3))
+        ca = list(reversed(PA)) if rev_a else PA
+        cb = list(reversed(PB)) if rev_b else PB
+        tA = arc_params(PA)
+        tB = arc_params(PB)
+        all_t = sorted(set(tA + tB))
+        rA = [pt_at(PA, tA, t) for t in all_t]
+        rB = [pt_at(PB, tB, t) for t in all_t]
+        if rev_a: rA = list(reversed(rA))
+        if rev_b: rB = list(reversed(rB))
+        faces = []
+        na, nb = len(ca), len(cb)
+        for i in range(na):
+            faces.append(tri(Am, ca[(i+1)%na], ca[i]))
+        for i in range(nb):
+            faces.append(tri(Bm, cb[i], cb[(i+1)%nb]))
+        n = len(rA)
+        for i in range(n):
+            j = (i+1)%n
+            faces.append(tri(rA[i], rB[j], rB[i]))
+            faces.append(tri(rA[i], rA[j], rB[j]))
+        sew = BRepBuilderAPI_Sewing(1e-2)
+        for f in faces: sew.Add(f)
+        sew.Perform()
+        try:
+            shell = TopoDS.Shell_s(sew.SewedShape())
+        except:
+            return None
+        fix = ShapeFix_Solid()
+        fix.Init(BRepBuilderAPI_MakeSolid(shell).Solid())
+        fix.Perform()
+        s = Solid(fix.Solid())
+        print(f"    rev_a={rev_a} rev_b={rev_b}: valid={s.is_valid} vol={s.volume:.1f}")
+        return s if s.is_valid and s.volume > 0 else None
+
+    for pts_b in [B_orig, B_rev]:
+        wa = Wire.make_polygon([Vector(*p) for p in A], close=True)
+        wb = Wire.make_polygon([Vector(*p) for p in pts_b], close=True)
+        for ruled in [False, True]:
+            for w1, w2 in [(wa, wb), (wb, wa)]:
+                try:
+                    gen = BRepOffsetAPI_ThruSections(isSolid=True, ruled=ruled)
+                    gen.AddWire(w1.wrapped)
+                    gen.AddWire(w2.wrapped)
+                    gen.Build()
+                    s = Solid(gen.Shape())
+                    if s.is_valid and s.volume > 0:
+                        print(f"  loft38 ThruSections OK ruled={ruled} vol={s.volume:.1f}")
+                        return s
+                except: pass
+        for ra, rb in [(False,False),(True,False),(False,True),(True,True)]:
+            r = build(A, pts_b, ra, rb)
+            if r:
+                print(f"  loft38 OK vol={r.volume:.1f}")
+                return r
+
+    raise ValueError("loft38 failed")
+
+loft38 = make_loft38()
+
+print("Building loft 39...")
+
+def make_loft39():
+    from OCP.BRepOffsetAPI import BRepOffsetAPI_ThruSections
+    from OCP.BRepBuilderAPI import (BRepBuilderAPI_Sewing,
+                                     BRepBuilderAPI_MakeSolid,
+                                     BRepBuilderAPI_MakeFace)
+    from OCP.TopoDS import TopoDS
+    from OCP.ShapeFix import ShapeFix_Solid
+    import math
+
+    A = [
+        (1525.422, 1330.448,  85.638),
+        (1541.03,  1294.043, 100.0),
+        (1578.711, 1206.155, 134.673),
+        (1578.699, 1036.164, 132.893),
+        (1541.426, 1122.695, 100.0),
+        (1525.164, 1160.448,  85.649),
+    ]
+    B = [
+        (1518.477, 1330.456,  46.245),
+        (1574.947, 1206.572,  94.853),
+        (1574.935, 1036.581,  93.073),
+        (1518.218, 1160.456,  46.257),
+    ]
+
+    def tri(p1, p2, p3):
+        w = Wire.make_polygon([Vector(*p1), Vector(*p2), Vector(*p3)], close=True)
+        return BRepBuilderAPI_MakeFace(w.wrapped).Face()
+
+    def arc_params(pts):
+        n = len(pts)
+        segs = [math.sqrt(sum((pts[(i+1)%n][j]-pts[i][j])**2 for j in range(3))) for i in range(n)]
+        total = sum(segs)
+        t, cum = [], 0.0
+        for s in segs:
+            t.append(cum/total)
+            cum += s
+        return t
+
+    def pt_at(pts, ts, t):
+        n = len(pts)
+        t = t % 1.0
+        for i in range(n):
+            t1 = ts[(i+1)%n] if i < n-1 else 1.0
+            if ts[i] <= t <= t1+1e-10:
+                s = (t-ts[i])/(t1-ts[i]) if (t1-ts[i]) > 1e-12 else 0.0
+                p, q = pts[i], pts[(i+1)%n]
+                return tuple(p[j]+s*(q[j]-p[j]) for j in range(3))
+        return pts[0]
+
+    def build(PA, PB, rev_a=False, rev_b=False):
+        Am = tuple(sum(v[i] for v in PA)/len(PA) for i in range(3))
+        Bm = tuple(sum(v[i] for v in PB)/len(PB) for i in range(3))
+        ca = list(reversed(PA)) if rev_a else PA
+        cb = list(reversed(PB)) if rev_b else PB
+        tA = arc_params(PA)
+        tB = arc_params(PB)
+        all_t = sorted(set(tA + tB))
+        rA = [pt_at(PA, tA, t) for t in all_t]
+        rB = [pt_at(PB, tB, t) for t in all_t]
+        if rev_a: rA = list(reversed(rA))
+        if rev_b: rB = list(reversed(rB))
+        faces = []
+        na, nb = len(ca), len(cb)
+        for i in range(na):
+            faces.append(tri(Am, ca[(i+1)%na], ca[i]))
+        for i in range(nb):
+            faces.append(tri(Bm, cb[i], cb[(i+1)%nb]))
+        n = len(rA)
+        for i in range(n):
+            j = (i+1)%n
+            faces.append(tri(rA[i], rB[j], rB[i]))
+            faces.append(tri(rA[i], rA[j], rB[j]))
+        sew = BRepBuilderAPI_Sewing(1e-2)
+        for f in faces: sew.Add(f)
+        sew.Perform()
+        try:
+            shell = TopoDS.Shell_s(sew.SewedShape())
+        except:
+            return None
+        fix = ShapeFix_Solid()
+        fix.Init(BRepBuilderAPI_MakeSolid(shell).Solid())
+        fix.Perform()
+        s = Solid(fix.Solid())
+        print(f"    rev_a={rev_a} rev_b={rev_b}: valid={s.is_valid} vol={s.volume:.1f}")
+        return s if s.is_valid and s.volume > 0 else None
+
+    wa = Wire.make_polygon([Vector(*p) for p in A], close=True)
+    wb = Wire.make_polygon([Vector(*p) for p in B], close=True)
+    for ruled in [False, True]:
+        for w1, w2 in [(wa, wb), (wb, wa)]:
+            try:
+                gen = BRepOffsetAPI_ThruSections(isSolid=True, ruled=ruled)
+                gen.AddWire(w1.wrapped)
+                gen.AddWire(w2.wrapped)
+                gen.Build()
+                s = Solid(gen.Shape())
+                if s.is_valid and s.volume > 0:
+                    print(f"  loft39 ThruSections OK ruled={ruled} vol={s.volume:.1f}")
+                    return s
+            except: pass
+
+    for ra, rb in [(False,False),(True,False),(False,True),(True,True)]:
+        r = build(A, B, ra, rb)
+        if r:
+            print(f"  loft39 OK vol={r.volume:.1f}")
+            return r
+
+    raise ValueError("loft39 failed")
+
+loft39 = make_loft39()
+
+print("Building loft 40...")
+
+def make_loft40():
+    from OCP.BRepOffsetAPI import BRepOffsetAPI_ThruSections
+    from OCP.BRepBuilderAPI import (BRepBuilderAPI_Sewing,
+                                     BRepBuilderAPI_MakeSolid,
+                                     BRepBuilderAPI_MakeFace)
+    from OCP.TopoDS import TopoDS
+    from OCP.ShapeFix import ShapeFix_Solid
+    import math
+
+    A = [
+        (1525.164, 1160.448,  85.649),
+        (1541.426, 1122.695, 100.0),
+        (1578.699, 1036.164, 132.893),
+        (1579.021,  988.772, 135.842),
+        (1538.164, 1084.017, 100.0),
+        (1525.692, 1113.089,  89.06),
+    ]
+    B = [
+        (1518.218, 1160.456,  46.257),
+        (1574.935, 1036.581,  93.073),
+        (1575.369,  979.432,  97.119),
+        (1518.941, 1103.352,  50.855),
+    ]
+    B_rev = list(reversed(B))
+
+    def tri(p1, p2, p3):
+        w = Wire.make_polygon([Vector(*p1), Vector(*p2), Vector(*p3)], close=True)
+        return BRepBuilderAPI_MakeFace(w.wrapped).Face()
+
+    def arc_params(pts):
+        n = len(pts)
+        segs = [math.sqrt(sum((pts[(i+1)%n][j]-pts[i][j])**2 for j in range(3))) for i in range(n)]
+        total = sum(segs)
+        t, cum = [], 0.0
+        for s in segs:
+            t.append(cum/total)
+            cum += s
+        return t
+
+    def pt_at(pts, ts, t):
+        n = len(pts)
+        t = t % 1.0
+        for i in range(n):
+            t1 = ts[(i+1)%n] if i < n-1 else 1.0
+            if ts[i] <= t <= t1+1e-10:
+                s = (t-ts[i])/(t1-ts[i]) if (t1-ts[i]) > 1e-12 else 0.0
+                p, q = pts[i], pts[(i+1)%n]
+                return tuple(p[j]+s*(q[j]-p[j]) for j in range(3))
+        return pts[0]
+
+    def build(PA, PB, rev_a=False, rev_b=False):
+        Am = tuple(sum(v[i] for v in PA)/len(PA) for i in range(3))
+        ca = list(reversed(PA)) if rev_a else PA
+        cb = list(reversed(PB)) if rev_b else PB
+        tA = arc_params(PA)
+        tB = arc_params(PB)
+        all_t = sorted(set(tA + tB))
+        rA = [pt_at(PA, tA, t) for t in all_t]
+        rB = [pt_at(PB, tB, t) for t in all_t]
+        if rev_a: rA = list(reversed(rA))
+        if rev_b: rB = list(reversed(rB))
+        faces = []
+        na = len(ca)
+        for i in range(na):
+            faces.append(tri(Am, ca[(i+1)%na], ca[i]))
+        nb = len(cb)
+        if nb == 4:
+            if not rev_b:
+                faces += [tri(cb[0], cb[1], cb[2]), tri(cb[0], cb[2], cb[3])]
+            else:
+                faces += [tri(cb[0], cb[2], cb[1]), tri(cb[0], cb[3], cb[2])]
+        else:
+            Bm = tuple(sum(v[i] for v in cb)/nb for i in range(3))
+            for i in range(nb):
+                faces.append(tri(Bm, cb[i], cb[(i+1)%nb]))
+        n = len(rA)
+        for i in range(n):
+            j = (i+1)%n
+            faces.append(tri(rA[i], rB[j], rB[i]))
+            faces.append(tri(rA[i], rA[j], rB[j]))
+        sew = BRepBuilderAPI_Sewing(1e-2)
+        for f in faces: sew.Add(f)
+        sew.Perform()
+        try:
+            shell = TopoDS.Shell_s(sew.SewedShape())
+        except:
+            return None
+        fix = ShapeFix_Solid()
+        fix.Init(BRepBuilderAPI_MakeSolid(shell).Solid())
+        fix.Perform()
+        s = Solid(fix.Solid())
+        print(f"    rev_a={rev_a} rev_b={rev_b}: valid={s.is_valid} vol={s.volume:.1f}")
+        return s if s.is_valid and s.volume > 0 else None
+
+    for pts_b in [B, B_rev]:
+        wa = Wire.make_polygon([Vector(*p) for p in A], close=True)
+        wb = Wire.make_polygon([Vector(*p) for p in pts_b], close=True)
+        for ruled in [False, True]:
+            for w1, w2 in [(wa, wb), (wb, wa)]:
+                try:
+                    gen = BRepOffsetAPI_ThruSections(isSolid=True, ruled=ruled)
+                    gen.AddWire(w1.wrapped)
+                    gen.AddWire(w2.wrapped)
+                    gen.Build()
+                    s = Solid(gen.Shape())
+                    if s.is_valid and s.volume > 0:
+                        print(f"  loft40 ThruSections OK ruled={ruled} vol={s.volume:.1f}")
+                        return s
+                except: pass
+        for ra, rb in [(False,False),(True,False),(False,True),(True,True)]:
+            r = build(A, pts_b, ra, rb)
+            if r:
+                print(f"  loft40 OK vol={r.volume:.1f}")
+                return r
+
+    raise ValueError("loft40 failed")
+
+loft40 = make_loft40()
+
+print("Building loft 41...")
+
+def make_loft41():
+    from OCP.BRepOffsetAPI import BRepOffsetAPI_ThruSections
+    from OCP.BRepBuilderAPI import (BRepBuilderAPI_Sewing,
+                                     BRepBuilderAPI_MakeSolid,
+                                     BRepBuilderAPI_MakeFace)
+    from OCP.TopoDS import TopoDS
+    from OCP.ShapeFix import ShapeFix_Solid
+    import math
+
+    A = [
+        (1518.941, 1103.352,  50.855),
+        (1575.369,  979.432,  97.119),
+        (1555.458,  979.414,  99.001),
+    ]
+    B = [
+        (1525.692, 1113.089,  89.06),
+        (1533.205, 1085.137, 100.0),
+        (1559.11,   988.753, 137.724),
+        (1579.021,  988.772, 135.842),
+        (1538.164, 1084.017, 100.0),
+    ]
+    B_rev = list(reversed(B))
+
+    def tri(p1, p2, p3):
+        w = Wire.make_polygon([Vector(*p1), Vector(*p2), Vector(*p3)], close=True)
+        return BRepBuilderAPI_MakeFace(w.wrapped).Face()
+
+    def arc_params(pts):
+        n = len(pts)
+        segs = [math.sqrt(sum((pts[(i+1)%n][j]-pts[i][j])**2 for j in range(3))) for i in range(n)]
+        total = sum(segs)
+        t, cum = [], 0.0
+        for s in segs:
+            t.append(cum/total)
+            cum += s
+        return t
+
+    def pt_at(pts, ts, t):
+        n = len(pts)
+        t = t % 1.0
+        for i in range(n):
+            t1 = ts[(i+1)%n] if i < n-1 else 1.0
+            if ts[i] <= t <= t1+1e-10:
+                s = (t-ts[i])/(t1-ts[i]) if (t1-ts[i]) > 1e-12 else 0.0
+                p, q = pts[i], pts[(i+1)%n]
+                return tuple(p[j]+s*(q[j]-p[j]) for j in range(3))
+        return pts[0]
+
+    def build(PA, PB, rev_a=False, rev_b=False):
+        Am = tuple(sum(v[i] for v in PA)/len(PA) for i in range(3))
+        Bm = tuple(sum(v[i] for v in PB)/len(PB) for i in range(3))
+        ca = list(reversed(PA)) if rev_a else PA
+        cb = list(reversed(PB)) if rev_b else PB
+        tA = arc_params(PA)
+        tB = arc_params(PB)
+        all_t = sorted(set(tA + tB))
+        rA = [pt_at(PA, tA, t) for t in all_t]
+        rB = [pt_at(PB, tB, t) for t in all_t]
+        if rev_a: rA = list(reversed(rA))
+        if rev_b: rB = list(reversed(rB))
+        faces = []
+        faces.append(tri(ca[0], ca[1], ca[2]))
+        nb = len(cb)
+        for i in range(nb):
+            faces.append(tri(Bm, cb[i], cb[(i+1)%nb]))
+        n = len(rA)
+        for i in range(n):
+            j = (i+1)%n
+            faces.append(tri(rA[i], rB[j], rB[i]))
+            faces.append(tri(rA[i], rA[j], rB[j]))
+        sew = BRepBuilderAPI_Sewing(1e-2)
+        for f in faces: sew.Add(f)
+        sew.Perform()
+        try:
+            shell = TopoDS.Shell_s(sew.SewedShape())
+        except:
+            return None
+        fix = ShapeFix_Solid()
+        fix.Init(BRepBuilderAPI_MakeSolid(shell).Solid())
+        fix.Perform()
+        s = Solid(fix.Solid())
+        print(f"    rev_a={rev_a} rev_b={rev_b}: valid={s.is_valid} vol={s.volume:.1f}")
+        return s if s.is_valid and s.volume > 0 else None
+
+    for pts_b in [B, B_rev]:
+        wa = Wire.make_polygon([Vector(*p) for p in A], close=True)
+        wb = Wire.make_polygon([Vector(*p) for p in pts_b], close=True)
+        for ruled in [False, True]:
+            for w1, w2 in [(wa, wb), (wb, wa)]:
+                try:
+                    gen = BRepOffsetAPI_ThruSections(isSolid=True, ruled=ruled)
+                    gen.AddWire(w1.wrapped)
+                    gen.AddWire(w2.wrapped)
+                    gen.Build()
+                    s = Solid(gen.Shape())
+                    if s.is_valid and s.volume > 0:
+                        print(f"  loft41 ThruSections OK ruled={ruled} vol={s.volume:.1f}")
+                        return s
+                except: pass
+        for ra, rb in [(False,False),(True,False),(False,True),(True,True)]:
+            r = build(A, pts_b, ra, rb)
+            if r:
+                print(f"  loft41 OK vol={r.volume:.1f}")
+                return r
+
+    raise ValueError("loft41 failed")
+
+loft41 = make_loft41()
+
+print("Building loft 42...")
+
+def make_loft42():
+    from OCP.BRepOffsetAPI import BRepOffsetAPI_ThruSections
+    from OCP.BRepBuilderAPI import (BRepBuilderAPI_Sewing,
+                                     BRepBuilderAPI_MakeSolid,
+                                     BRepBuilderAPI_MakeFace)
+    from OCP.TopoDS import TopoDS
+    from OCP.ShapeFix import ShapeFix_Solid
+    import math
+
+    A = [
+        (1525.692, 1113.089,  89.06),
+        (1533.205, 1085.137, 100.0),
+        (1559.11,   988.753, 137.724),
+        (1561.224,  898.81,  159.217),
+        (1563.338,  808.867, 180.711),
+        (1548.291,  871.26,  157.084),
+        (1533.245,  933.654, 133.456),
+        (1529.469, 1023.371, 111.258),
+        (1527.554, 1068.873, 100.0),
+    ]
+    # B1/B2 are 4.3mm apart, B6/B7 are 4.8mm apart — merged
+    B = [
+        (1518.941, 1103.352,  50.855),
+        tuple(((1555.458+1555.556)/2, (979.414+975.234)/2, (99.001+100.0)/2)),
+        (1558.596,  845.893, 130.909),
+        (1543.269,  848.286, 121.739),
+        (1529.588,  850.421, 113.436),
+        tuple(((1527.302+1527.106)/2, (904.723+909.368)/2, (100.0+98.851)/2)),
+        (1523.024, 1006.36,   74.853),
+    ]
+    B_rev = list(reversed(B))
+
+    def tri(p1, p2, p3):
+        w = Wire.make_polygon([Vector(*p1), Vector(*p2), Vector(*p3)], close=True)
+        return BRepBuilderAPI_MakeFace(w.wrapped).Face()
+
+    def arc_params(pts):
+        n = len(pts)
+        segs = [math.sqrt(sum((pts[(i+1)%n][j]-pts[i][j])**2 for j in range(3))) for i in range(n)]
+        total = sum(segs)
+        t, cum = [], 0.0
+        for s in segs:
+            t.append(cum/total)
+            cum += s
+        return t
+
+    def pt_at(pts, ts, t):
+        n = len(pts)
+        t = t % 1.0
+        for i in range(n):
+            t1 = ts[(i+1)%n] if i < n-1 else 1.0
+            if ts[i] <= t <= t1+1e-10:
+                s = (t-ts[i])/(t1-ts[i]) if (t1-ts[i]) > 1e-12 else 0.0
+                p, q = pts[i], pts[(i+1)%n]
+                return tuple(p[j]+s*(q[j]-p[j]) for j in range(3))
+        return pts[0]
+
+    def build(PA, PB, rev_a=False, rev_b=False):
+        Am = tuple(sum(v[i] for v in PA)/len(PA) for i in range(3))
+        Bm = tuple(sum(v[i] for v in PB)/len(PB) for i in range(3))
+        ca = list(reversed(PA)) if rev_a else PA
+        cb = list(reversed(PB)) if rev_b else PB
+        tA = arc_params(PA)
+        tB = arc_params(PB)
+        all_t = sorted(set(tA + tB))
+        rA = [pt_at(PA, tA, t) for t in all_t]
+        rB = [pt_at(PB, tB, t) for t in all_t]
+        if rev_a: rA = list(reversed(rA))
+        if rev_b: rB = list(reversed(rB))
+        faces = []
+        na, nb = len(ca), len(cb)
+        for i in range(na):
+            faces.append(tri(Am, ca[(i+1)%na], ca[i]))
+        for i in range(nb):
+            faces.append(tri(Bm, cb[i], cb[(i+1)%nb]))
+        n = len(rA)
+        for i in range(n):
+            j = (i+1)%n
+            faces.append(tri(rA[i], rB[j], rB[i]))
+            faces.append(tri(rA[i], rA[j], rB[j]))
+        sew = BRepBuilderAPI_Sewing(1e-2)
+        for f in faces: sew.Add(f)
+        sew.Perform()
+        try:
+            shell = TopoDS.Shell_s(sew.SewedShape())
+        except:
+            return None
+        fix = ShapeFix_Solid()
+        fix.Init(BRepBuilderAPI_MakeSolid(shell).Solid())
+        fix.Perform()
+        s = Solid(fix.Solid())
+        print(f"    rev_a={rev_a} rev_b={rev_b}: valid={s.is_valid} vol={s.volume:.1f}")
+        return s if s.is_valid and s.volume > 0 else None
+
+    for pts_b in [B, B_rev]:
+        wa = Wire.make_polygon([Vector(*p) for p in A], close=True)
+        wb = Wire.make_polygon([Vector(*p) for p in pts_b], close=True)
+        for ruled in [False, True]:
+            for w1, w2 in [(wa, wb), (wb, wa)]:
+                try:
+                    gen = BRepOffsetAPI_ThruSections(isSolid=True, ruled=ruled)
+                    gen.AddWire(w1.wrapped)
+                    gen.AddWire(w2.wrapped)
+                    gen.Build()
+                    s = Solid(gen.Shape())
+                    if s.is_valid and s.volume > 0:
+                        print(f"  loft42 ThruSections OK ruled={ruled} vol={s.volume:.1f}")
+                        return s
+                except: pass
+        for ra, rb in [(False,False),(True,False),(False,True),(True,True)]:
+            r = build(A, pts_b, ra, rb)
+            if r:
+                print(f"  loft42 OK vol={r.volume:.1f}")
+                return r
+
+    raise ValueError("loft42 failed")
+
+loft42 = make_loft42()
+
+print("Building loft 43...")
+
+def make_loft43():
+    from OCP.BRepOffsetAPI import BRepOffsetAPI_ThruSections
+    from OCP.BRepBuilderAPI import (BRepBuilderAPI_Sewing,
+                                     BRepBuilderAPI_MakeSolid,
+                                     BRepBuilderAPI_MakeFace)
+    from OCP.TopoDS import TopoDS
+    from OCP.ShapeFix import ShapeFix_Solid
+    import math
+
+    A = [
+        (1346.582, 1772.353, 237.571),
+        (1385.788, 1748.74,  269.101),
+        (1370.361, 1585.716, 183.018),
+        (1323.908, 1609.869, 152.074),
+    ]
+    B = [
+        (1334.85,  1778.299, 196.927),
+        (1378.445, 1754.431, 227.403),
+        (1364.268, 1604.626, 148.3),
+        (1314.014, 1628.989, 118.361),
+    ]
+    B_rev = list(reversed(B))
+
+    def tri(p1, p2, p3):
+        w = Wire.make_polygon([Vector(*p1), Vector(*p2), Vector(*p3)], close=True)
+        return BRepBuilderAPI_MakeFace(w.wrapped).Face()
+
+    def arc_params(pts):
+        n = len(pts)
+        segs = [math.sqrt(sum((pts[(i+1)%n][j]-pts[i][j])**2 for j in range(3))) for i in range(n)]
+        total = sum(segs)
+        t, cum = [], 0.0
+        for s in segs:
+            t.append(cum/total)
+            cum += s
+        return t
+
+    def pt_at(pts, ts, t):
+        n = len(pts)
+        t = t % 1.0
+        for i in range(n):
+            t1 = ts[(i+1)%n] if i < n-1 else 1.0
+            if ts[i] <= t <= t1+1e-10:
+                s = (t-ts[i])/(t1-ts[i]) if (t1-ts[i]) > 1e-12 else 0.0
+                p, q = pts[i], pts[(i+1)%n]
+                return tuple(p[j]+s*(q[j]-p[j]) for j in range(3))
+        return pts[0]
+
+    def build(PA, PB, rev_a=False, rev_b=False):
+        ca = list(reversed(PA)) if rev_a else PA
+        cb = list(reversed(PB)) if rev_b else PB
+        tA = arc_params(PA)
+        tB = arc_params(PB)
+        all_t = sorted(set(tA + tB))
+        rA = [pt_at(PA, tA, t) for t in all_t]
+        rB = [pt_at(PB, tB, t) for t in all_t]
+        if rev_a: rA = list(reversed(rA))
+        if rev_b: rB = list(reversed(rB))
+        faces = []
+        if not rev_a:
+            faces += [tri(ca[0], ca[1], ca[2]), tri(ca[0], ca[2], ca[3])]
+        else:
+            faces += [tri(ca[0], ca[2], ca[1]), tri(ca[0], ca[3], ca[2])]
+        if not rev_b:
+            faces += [tri(cb[0], cb[2], cb[1]), tri(cb[0], cb[3], cb[2])]
+        else:
+            faces += [tri(cb[0], cb[1], cb[2]), tri(cb[0], cb[2], cb[3])]
+        n = len(rA)
+        for i in range(n):
+            j = (i+1)%n
+            faces.append(tri(rA[i], rB[j], rB[i]))
+            faces.append(tri(rA[i], rA[j], rB[j]))
+        sew = BRepBuilderAPI_Sewing(1e-2)
+        for f in faces: sew.Add(f)
+        sew.Perform()
+        try:
+            shell = TopoDS.Shell_s(sew.SewedShape())
+        except:
+            return None
+        fix = ShapeFix_Solid()
+        fix.Init(BRepBuilderAPI_MakeSolid(shell).Solid())
+        fix.Perform()
+        s = Solid(fix.Solid())
+        print(f"    rev_a={rev_a} rev_b={rev_b}: valid={s.is_valid} vol={s.volume:.1f}")
+        return s if s.is_valid and s.volume > 0 else None
+
+    for pts_b in [B, B_rev]:
+        wa = Wire.make_polygon([Vector(*p) for p in A], close=True)
+        wb = Wire.make_polygon([Vector(*p) for p in pts_b], close=True)
+        for ruled in [False, True]:
+            for w1, w2 in [(wa, wb), (wb, wa)]:
+                try:
+                    gen = BRepOffsetAPI_ThruSections(isSolid=True, ruled=ruled)
+                    gen.AddWire(w1.wrapped)
+                    gen.AddWire(w2.wrapped)
+                    gen.Build()
+                    s = Solid(gen.Shape())
+                    if s.is_valid and s.volume > 0:
+                        print(f"  loft43 ThruSections OK ruled={ruled} vol={s.volume:.1f}")
+                        return s
+                except: pass
+        for ra, rb in [(False,False),(True,False),(False,True),(True,True)]:
+            r = build(A, pts_b, ra, rb)
+            if r:
+                print(f"  loft43 OK vol={r.volume:.1f}")
+                return r
+
+    raise ValueError("loft43 failed")
+
+loft43 = make_loft43()
+
+print("Building loft 44...")
+
+def make_loft44():
+    from OCP.BRepOffsetAPI import BRepOffsetAPI_ThruSections
+    from OCP.BRepBuilderAPI import (BRepBuilderAPI_Sewing,
+                                     BRepBuilderAPI_MakeSolid,
+                                     BRepBuilderAPI_MakeFace)
+    from OCP.TopoDS import TopoDS
+    from OCP.ShapeFix import ShapeFix_Solid
+
+    A = [
+        (1323.908, 1609.869, 152.074),
+        (1370.361, 1585.716, 183.018),
+        (1366.938, 1542.348, 163.984),
+        (1318.96,  1566.62,  133.103),
+    ]
+    # Reordered to match A winding: upper-left→upper-right→lower-right→lower-left
+    B = [
+        (1314.014, 1628.989, 118.361),
+        (1364.268, 1604.626, 148.3),
+        (1360.217, 1552.1,   125.778),
+        (1309.236, 1586.163, 100.0),
+    ]
+
+    # Attempt 1: make_loft_solid
+    for pts_b in [B, list(reversed(B))]:
+        try:
+            s = make_loft_solid(A, pts_b)
+            if s.is_valid and s.volume > 0:
+                print(f"  loft44 make_loft_solid OK vol={s.volume:.1f}")
+                return s
+        except: pass
+
+    # Attempt 2: make_ruled_solid
+    for pts_b in [B, list(reversed(B))]:
+        try:
+            s = make_ruled_solid(A, pts_b)
+            if s.is_valid and s.volume > 0:
+                print(f"  loft44 make_ruled_solid OK vol={s.volume:.1f}")
+                return s
+        except: pass
+
+    # Attempt 3: manual diagonal-cap stitching
+    def tri(p1, p2, p3):
+        w = Wire.make_polygon([Vector(*p1), Vector(*p2), Vector(*p3)], close=True)
+        return BRepBuilderAPI_MakeFace(w.wrapped).Face()
+
+    def build(PA, PB, rev_a=False, rev_b=False):
+        ca = list(reversed(PA)) if rev_a else PA
+        cb = list(reversed(PB)) if rev_b else PB
+        faces = []
+        if not rev_a:
+            faces += [tri(ca[0], ca[1], ca[2]), tri(ca[0], ca[2], ca[3])]
+        else:
+            faces += [tri(ca[0], ca[2], ca[1]), tri(ca[0], ca[3], ca[2])]
+        if not rev_b:
+            faces += [tri(cb[0], cb[2], cb[1]), tri(cb[0], cb[3], cb[2])]
+        else:
+            faces += [tri(cb[0], cb[1], cb[2]), tri(cb[0], cb[2], cb[3])]
+        for i in range(4):
+            j = (i+1)%4
+            faces += [tri(ca[i], cb[j], cb[i]), tri(ca[i], ca[j], cb[j])]
+        sew = BRepBuilderAPI_Sewing(1e-2)
+        for f in faces: sew.Add(f)
+        sew.Perform()
+        try:
+            shell = TopoDS.Shell_s(sew.SewedShape())
+        except:
+            return None
+        fix = ShapeFix_Solid()
+        fix.Init(BRepBuilderAPI_MakeSolid(shell).Solid())
+        fix.Perform()
+        s = Solid(fix.Solid())
+        print(f"    rev_a={rev_a} rev_b={rev_b}: valid={s.is_valid} vol={s.volume:.1f}")
+        return s if s.is_valid and s.volume > 0 else None
+
+    for pts_b in [B, list(reversed(B))]:
+        for ra, rb in [(False,False),(True,False),(False,True),(True,True)]:
+            r = build(A, pts_b, ra, rb)
+            if r:
+                print(f"  loft44 manual OK vol={r.volume:.1f}")
+                return r
+
+    raise ValueError("loft44 failed")
+
+loft44 = make_loft44()
+
+print("Building loft 45...")
+
+def make_loft45():
+    # Simplify both profiles to 4 dominant corners.
+    # A: drop near-degenerate A5(16.78mm+33.72mm edges) and A6
+    # B: merge near-degenerate B2-B3 (8.89mm), drop B5
+    A = [
+        (1359.496, 1377.478, 123.21),   # bottom-right
+        (1366.938, 1542.348, 163.984),  # top-right
+        (1318.96,  1566.62,  133.103),  # top-left
+        (1308.995, 1402.013,  91.809),  # bottom-left
+    ]
+    _b2 = (1308.17,  1576.606,  95.903)
+    _b3 = (1315.308, 1573.245, 100.0)
+    _b23 = tuple((_b2[i]+_b3[i])/2 for i in range(3))
+    B = [
+        (1352.775, 1387.23,   85.004),  # bottom-right
+        (1360.217, 1552.1,   125.778),  # top-right
+        _b23,                            # top-left (merged)
+        (1298.205, 1411.998,  54.609),  # bottom-left
+    ]
+
+    for pts_b in [B, list(reversed(B))]:
+        try:
+            s = make_loft_solid(A, pts_b)
+            if s.is_valid and s.volume > 0:
+                print(f"  loft45 make_loft_solid OK vol={s.volume:.1f}")
+                return s
+        except: pass
+
+    for pts_b in [B, list(reversed(B))]:
+        try:
+            s = make_ruled_solid(A, pts_b)
+            if s.is_valid and s.volume > 0:
+                print(f"  loft45 make_ruled_solid OK vol={s.volume:.1f}")
+                return s
+        except: pass
+
+    raise ValueError("loft45 failed")
+
+loft45 = make_loft45()
+
+# ══════════════════════════════════════════════════════════════
+# Loft 46: 6-gon to 4-gon (Explicit Exact Triangulation)
+# ══════════════════════════════════════════════════════════════
+print("Building loft 46...")
+
+def make_loft46():
+    from OCP.BRepBuilderAPI import (BRepBuilderAPI_Sewing,
+                                     BRepBuilderAPI_MakeSolid,
+                                     BRepBuilderAPI_MakeFace)
+    from OCP.TopoDS import TopoDS
+    from OCP.ShapeFix import ShapeFix_Solid
+
+    # ── Profile A (6 Edges) ──────────────────────────────
+    A = [
+        (1322.168, 1395.613, 100.0),    # A[0]
+        (1359.496, 1377.478, 123.21),   # A[1]
+        (1358.005, 1330.705, 115.156),  # A[2]
+        (1333.64,  1342.486, 100.0),    # A[3]
+        (1307.153, 1355.293,  83.524),  # A[4]
+        (1308.995, 1402.013,  91.809),  # A[5]
+    ]
+    
+    # ── Profile B (4 Edges) ──────────────────────────────
+    B = [
+        (1352.775, 1387.23,   85.004),  # B[0]
+        (1351.059, 1330.713,  75.763),  # B[1]
+        (1296.117, 1355.542,  45.077),  # B[2]
+        (1298.205, 1411.998,  54.609),  # B[3]
+    ]
+
+    def tri(p1, p2, p3):
+        # Generates a flat, robust face
+        w = Wire.make_polygon([Vector(*p1), Vector(*p2), Vector(*p3)], close=True)
+        return BRepBuilderAPI_MakeFace(w.wrapped).Face()
+
+    # Centroids for end-cap fanning
+    Am = tuple(sum(v[i] for v in A)/6 for i in range(3))
+    Bm = tuple(sum(v[i] for v in B)/4 for i in range(3))
+
+    def build_solid(flipped=False):
+        faces = []
+        
+        if not flipped:
+            # Source Cap (CCW)
+            for i in range(6): 
+                faces.append(tri(Am, A[(i+1)%6], A[i]))
+            
+            # Target Cap (CW)
+            for i in range(4): 
+                faces.append(tri(Bm, B[i], B[(i+1)%4]))
+            
+            # Explicit Side Walls (Guarantees no missing triangles)
+            faces.append(tri(A[5], A[0], B[3]))
+            faces.append(tri(A[0], B[0], B[3]))
+            faces.append(tri(A[0], A[1], B[0]))
+            faces.append(tri(A[1], B[1], B[0]))
+            faces.append(tri(A[1], A[2], B[1]))
+            faces.append(tri(A[2], A[3], B[1]))
+            faces.append(tri(A[3], B[2], B[1]))
+            faces.append(tri(A[3], A[4], B[2]))
+            faces.append(tri(A[4], B[3], B[2]))
+            faces.append(tri(A[4], A[5], B[3]))
+        
+        else:
+            # Source Cap Reversed
+            for i in range(6): 
+                faces.append(tri(Am, A[i], A[(i+1)%6]))
+            
+            # Target Cap Reversed
+            for i in range(4): 
+                faces.append(tri(Bm, B[(i+1)%4], B[i]))
+            
+            # Side Walls Reversed
+            faces.append(tri(A[5], B[3], A[0]))
+            faces.append(tri(A[0], B[3], B[0]))
+            faces.append(tri(A[0], B[0], A[1]))
+            faces.append(tri(A[1], B[0], B[1]))
+            faces.append(tri(A[1], B[1], A[2]))
+            faces.append(tri(A[2], B[1], A[3]))
+            faces.append(tri(A[3], B[1], B[2]))
+            faces.append(tri(A[3], B[2], A[4]))
+            faces.append(tri(A[4], B[2], B[3]))
+            faces.append(tri(A[4], B[3], A[5]))
+
+        # Filter out any accidental degenerates
+        faces = [f for f in faces if f is not None]
+
+        sew = BRepBuilderAPI_Sewing(1e-2)
+        for f in faces: sew.Add(f)
+        sew.Perform()
+        
+        try:
+            shell = TopoDS.Shell_s(sew.SewedShape())
+        except Exception:
+            return None
+            
+        fix = ShapeFix_Solid()
+        fix.Init(BRepBuilderAPI_MakeSolid(shell).Solid())
+        fix.Perform()
+        s = Solid(fix.Solid())
+        return s if s.is_valid and s.volume > 0 else None
+
+    # Attempt 1: Standard orientation
+    s = build_solid(flipped=False)
+    if s: 
+        print(f"  Loft 46 (Exact Manual) OK: vol={s.volume:.1f}")
+        return s
+        
+    # Attempt 2: Auto-flip to resolve normals if the volume was inverted
+    s = build_solid(flipped=True)
+    if s: 
+        print(f"  Loft 46 (Exact Manual, Flipped) OK: vol={s.volume:.1f}")
+        return s
+        
+    raise ValueError("Loft 46 failed to resolve closed volume geometry.")
+
+loft46 = make_loft46()
+
+# ══════════════════════════════════════════════════════════════
+# Loft 47: 6-gon to 4-gon (Explicit Exact Triangulation)
+# ══════════════════════════════════════════════════════════════
+print("Building loft 47...")
+
+def make_loft47():
+    from OCP.BRepBuilderAPI import (BRepBuilderAPI_Sewing,
+                                     BRepBuilderAPI_MakeSolid,
+                                     BRepBuilderAPI_MakeFace)
+    from OCP.TopoDS import TopoDS
+    from OCP.ShapeFix import ShapeFix_Solid
+
+    # ── Profile A (6 Edges - Traced continuously) ───────────────
+    A = [
+        (1358.005, 1330.705, 115.156),  # A[0] (Right Top)
+        (1333.640, 1342.486, 100.000),  # A[1] (Mid Top)
+        (1307.153, 1355.293,  83.524),  # A[2] (Left Top)
+        (1308.660, 1185.307,  81.990),  # A[3] (Left Bottom)
+        (1335.306, 1171.952, 100.000),  # A[4] (Mid Bottom)
+        (1357.746, 1160.705, 115.167),  # A[5] (Right Bottom)
+    ]
+    
+    # ── Profile B (4 Edges - Traced continuously) ───────────────
+    B = [
+        (1351.059, 1330.713, 75.763),   # B[0] (Right Top)
+        (1350.801, 1160.713, 75.775),   # B[1] (Right Bottom)
+        (1297.624, 1185.556, 43.543),   # B[2] (Left Bottom)
+        (1296.117, 1355.542, 45.077),   # B[3] (Left Top)
+    ]
+
+    def tri(p1, p2, p3):
+        w = Wire.make_polygon([Vector(*p1), Vector(*p2), Vector(*p3)], close=True)
+        return BRepBuilderAPI_MakeFace(w.wrapped).Face()
+
+    # Centroids for end-cap fanning
+    Am = tuple(sum(v[i] for v in A)/6 for i in range(3))
+    Bm = tuple(sum(v[i] for v in B)/4 for i in range(3))
+
+    def build_solid(flipped=False):
+        faces = []
+        
+        if not flipped:
+            # Source Cap (CCW)
+            for i in range(6): 
+                faces.append(tri(Am, A[(i+1)%6], A[i]))
+            
+            # Target Cap (CW)
+            for i in range(4): 
+                faces.append(tri(Bm, B[i], B[(i+1)%4]))
+            
+            # Explicit Side Walls (Guarantees no missing triangles)
+            # Top Wall (A0-A1-A2 mapped to B0-B3)
+            faces.append(tri(A[0], A[1], B[0]))
+            faces.append(tri(A[1], B[3], B[0]))
+            faces.append(tri(A[1], A[2], B[3]))
+            # Left Wall (A2-A3 mapped to B3-B2)
+            faces.append(tri(A[2], A[3], B[3]))
+            faces.append(tri(A[3], B[2], B[3]))
+            # Bottom Wall (A3-A4-A5 mapped to B2-B1)
+            faces.append(tri(A[3], A[4], B[2]))
+            faces.append(tri(A[4], B[1], B[2]))
+            faces.append(tri(A[4], A[5], B[1]))
+            # Right Wall (A5-A0 mapped to B1-B0)
+            faces.append(tri(A[5], A[0], B[1]))
+            faces.append(tri(A[0], B[0], B[1]))
+        
+        else:
+            # Source Cap Reversed
+            for i in range(6): 
+                faces.append(tri(Am, A[i], A[(i+1)%6]))
+            
+            # Target Cap Reversed
+            for i in range(4): 
+                faces.append(tri(Bm, B[(i+1)%4], B[i]))
+            
+            # Side Walls Reversed
+            faces.append(tri(A[0], B[0], A[1]))
+            faces.append(tri(A[1], B[0], B[3]))
+            faces.append(tri(A[1], B[3], A[2]))
+            faces.append(tri(A[2], B[3], A[3]))
+            faces.append(tri(A[3], B[3], B[2]))
+            faces.append(tri(A[3], B[2], A[4]))
+            faces.append(tri(A[4], B[2], B[1]))
+            faces.append(tri(A[4], B[1], A[5]))
+            faces.append(tri(A[5], B[1], A[0]))
+            faces.append(tri(A[0], B[1], B[0]))
+
+        # Filter out any accidental degenerates
+        faces = [f for f in faces if f is not None]
+
+        sew = BRepBuilderAPI_Sewing(1e-2)
+        for f in faces: sew.Add(f)
+        sew.Perform()
+        
+        try:
+            shell = TopoDS.Shell_s(sew.SewedShape())
+        except Exception:
+            return None
+            
+        fix = ShapeFix_Solid()
+        fix.Init(BRepBuilderAPI_MakeSolid(shell).Solid())
+        fix.Perform()
+        s = Solid(fix.Solid())
+        return s if s.is_valid and s.volume > 0 else None
+
+    # Attempt 1: Standard orientation
+    s = build_solid(flipped=False)
+    if s: 
+        print(f"  Loft 47 (Exact Manual) OK: vol={s.volume:.1f}")
+        return s
+        
+    # Attempt 2: Auto-flip to resolve normals if the volume was inverted
+    s = build_solid(flipped=True)
+    if s: 
+        print(f"  Loft 47 (Exact Manual, Flipped) OK: vol={s.volume:.1f}")
+        return s
+        
+    raise ValueError("Loft 47 failed to resolve closed volume geometry.")
+
+loft47 = make_loft47()
+
+# ══════════════════════════════════════════════════════════════
+# Loft 48: 6-gon to 4-gon (Explicit Exact Triangulation)
+# ══════════════════════════════════════════════════════════════
+print("Building loft 48...")
+
+def make_loft48():
+    from OCP.BRepBuilderAPI import (BRepBuilderAPI_Sewing,
+                                     BRepBuilderAPI_MakeSolid,
+                                     BRepBuilderAPI_MakeFace)
+    from OCP.TopoDS import TopoDS
+    from OCP.ShapeFix import ShapeFix_Solid
+
+    # ── Profile A (6 Edges - Traced continuously) ───────────────
+    A = [
+        (1357.746, 1160.705, 115.167),  # A[0] (Top Right)
+        (1358.275, 1113.346, 118.578),  # A[1] (Bottom Right)
+        (1331.673, 1126.903, 100.000),  # A[2] (Bottom Mid)
+        (1310.035, 1137.930,  84.888),  # A[3] (Bottom Left)
+        (1308.660, 1185.307,  81.990),  # A[4] (Top Left)
+        (1335.306, 1171.952, 100.000),  # A[5] (Top Mid)
+    ]
+    
+    # ── Profile B (4 Edges - Traced continuously) ───────────────
+    B = [
+        (1351.524, 1103.609,  80.373),  # B[0] (Bottom Right)
+        (1299.418, 1128.428,  47.512),  # B[1] (Bottom Left)
+        (1297.624, 1185.556,  43.543),  # B[2] (Top Left)
+        (1350.801, 1160.713,  75.775),  # B[3] (Top Right)
+    ]
+
+    def tri(p1, p2, p3):
+        w = Wire.make_polygon([Vector(*p1), Vector(*p2), Vector(*p3)], close=True)
+        return BRepBuilderAPI_MakeFace(w.wrapped).Face()
+
+    # Centroids for end-cap fanning
+    Am = tuple(sum(v[i] for v in A)/6 for i in range(3))
+    Bm = tuple(sum(v[i] for v in B)/4 for i in range(3))
+
+    def build_solid(flipped=False):
+        faces = []
+        
+        if not flipped:
+            # Source Cap (CCW)
+            for i in range(6): 
+                faces.append(tri(Am, A[(i+1)%6], A[i]))
+            
+            # Target Cap (CW)
+            for i in range(4): 
+                faces.append(tri(Bm, B[i], B[(i+1)%4]))
+            
+            # Explicit Side Walls (Guarantees no missing triangles)
+            # Right Wall (A0-A1 mapped to B3-B0)
+            faces.append(tri(A[0], A[1], B[0]))
+            faces.append(tri(A[0], B[0], B[3]))
+            # Bottom Wall (A1-A2-A3 mapped to B0-B1)
+            faces.append(tri(A[1], A[2], B[0]))
+            faces.append(tri(A[2], B[1], B[0]))
+            faces.append(tri(A[2], A[3], B[1]))
+            # Left Wall (A3-A4 mapped to B1-B2)
+            faces.append(tri(A[3], A[4], B[2]))
+            faces.append(tri(A[3], B[2], B[1]))
+            # Top Wall (A4-A5-A0 mapped to B2-B3)
+            faces.append(tri(A[4], A[5], B[2]))
+            faces.append(tri(A[5], B[3], B[2]))
+            faces.append(tri(A[5], A[0], B[3]))
+        
+        else:
+            # Source Cap Reversed
+            for i in range(6): 
+                faces.append(tri(Am, A[i], A[(i+1)%6]))
+            
+            # Target Cap Reversed
+            for i in range(4): 
+                faces.append(tri(Bm, B[(i+1)%4], B[i]))
+            
+            # Side Walls Reversed
+            faces.append(tri(A[0], B[0], A[1]))
+            faces.append(tri(A[0], B[3], B[0]))
+            faces.append(tri(A[1], B[0], A[2]))
+            faces.append(tri(A[2], B[0], B[1]))
+            faces.append(tri(A[2], B[1], A[3]))
+            faces.append(tri(A[3], B[2], A[4]))
+            faces.append(tri(A[3], B[1], B[2]))
+            faces.append(tri(A[4], B[2], A[5]))
+            faces.append(tri(A[5], B[2], B[3]))
+            faces.append(tri(A[5], B[3], A[0]))
+
+        # Filter out any accidental degenerates
+        faces = [f for f in faces if f is not None]
+
+        sew = BRepBuilderAPI_Sewing(1e-2)
+        for f in faces: sew.Add(f)
+        sew.Perform()
+        
+        try:
+            shell = TopoDS.Shell_s(sew.SewedShape())
+        except Exception:
+            return None
+            
+        fix = ShapeFix_Solid()
+        fix.Init(BRepBuilderAPI_MakeSolid(shell).Solid())
+        fix.Perform()
+        s = Solid(fix.Solid())
+        return s if s.is_valid and s.volume > 0 else None
+
+    # Attempt 1: Standard orientation
+    s = build_solid(flipped=False)
+    if s: 
+        print(f"  Loft 48 (Exact Manual) OK: vol={s.volume:.1f}")
+        return s
+        
+    # Attempt 2: Auto-flip to resolve normals if the volume was inverted
+    s = build_solid(flipped=True)
+    if s: 
+        print(f"  Loft 48 (Exact Manual, Flipped) OK: vol={s.volume:.1f}")
+        return s
+        
+    raise ValueError("Loft 48 failed to resolve closed volume geometry.")
+
+loft48 = make_loft48()
+
+# ══════════════════════════════════════════════════════════════
 # Fuse
 # ══════════════════════════════════════════════════════════════
 print("Fusing...")
@@ -3300,6 +6493,11 @@ with BuildPart() as part:
     add(frame17.part)
     add(frame18.part)
     add(frame19.part)
+    add(frame20.part)
+    add(frame21.part)
+    add(frame22.part)
+    add(frame23.part)
+    add(frame24.part)
     add(loft1)
     add(loft2)
     add(loft3)
@@ -3323,6 +6521,34 @@ with BuildPart() as part:
     add(loft19)
     add(loft20)
     add(loft21)
+    add(loft22)
+    add(loft23)
+    add(loft24)
+    add(loft25)
+    add(loft26)
+    add(loft27)
+    add(loft28)
+    add(loft29)
+    add(loft30)
+    add(loft31)
+    add(loft32)
+    add(loft32.translate((0, -0.01, 0)))
+    add(loft33)
+    add(loft34)
+    add(loft35)
+    add(loft36)
+    add(loft37)
+    add(loft38)
+    add(loft39)
+    add(loft40)
+    add(loft41)
+    add(loft42)
+    add(loft43)
+    add(loft44)
+    add(loft45)
+    add(loft46)
+    add(loft47)
+    add(loft48)
 print(f"  Final valid={part.part.is_valid}, volume={part.part.volume:.1f}")
 
 try:
