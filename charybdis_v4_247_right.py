@@ -6470,6 +6470,1479 @@ def make_loft48():
 
 loft48 = make_loft48()
 
+print("Building loft 49...")
+
+def make_loft49():
+    from OCP.BRepOffsetAPI import BRepOffsetAPI_ThruSections
+    from OCP.BRepBuilderAPI import (BRepBuilderAPI_Sewing,
+                                     BRepBuilderAPI_MakeSolid,
+                                     BRepBuilderAPI_MakeFace)
+    from OCP.TopoDS import TopoDS
+    from OCP.ShapeFix import ShapeFix_Solid
+    import math
+
+    A = [
+        (1331.673, 1126.903, 100.0),
+        (1358.275, 1113.346, 118.578),
+        (1362.051, 1023.628, 140.776),
+        (1365.828,  933.911, 162.974),
+        (1324.061,  958.238, 126.588),
+        (1317.048, 1048.084, 105.738),
+        (1315.118, 1072.811, 100.0),
+        (1310.035, 1137.93,   84.888),
+    ]
+    B = [
+        (1351.524, 1103.609,  80.373),
+        (1354.863, 1024.282, 100.0),
+        (1355.607, 1006.617, 104.371),
+        (1359.689,  909.625, 128.369),
+        (1323.92,   929.085, 100.0),
+        (1314.581,  934.166,  92.593),
+        (1306.999, 1031.297,  70.053),
+        (1299.418, 1128.428,  47.512),
+    ]
+    B_rev = list(reversed(B))
+
+    def tri(p1, p2, p3):
+        w = Wire.make_polygon([Vector(*p1), Vector(*p2), Vector(*p3)], close=True)
+        return BRepBuilderAPI_MakeFace(w.wrapped).Face()
+
+    def arc_params(pts):
+        n = len(pts)
+        segs = [math.sqrt(sum((pts[(i+1)%n][j]-pts[i][j])**2 for j in range(3))) for i in range(n)]
+        total = sum(segs)
+        t, cum = [], 0.0
+        for s in segs:
+            t.append(cum/total); cum += s
+        return t
+
+    def pt_at(pts, ts, t):
+        n = len(pts)
+        t = t % 1.0
+        for i in range(n):
+            t1 = ts[(i+1)%n] if i < n-1 else 1.0
+            if ts[i] <= t <= t1+1e-10:
+                s = (t-ts[i])/(t1-ts[i]) if (t1-ts[i]) > 1e-12 else 0.0
+                p, q = pts[i], pts[(i+1)%n]
+                return tuple(p[j]+s*(q[j]-p[j]) for j in range(3))
+        return pts[0]
+
+    def build(PA, PB, rev_a=False, rev_b=False):
+        Am = tuple(sum(v[i] for v in PA)/len(PA) for i in range(3))
+        Bm = tuple(sum(v[i] for v in PB)/len(PB) for i in range(3))
+        ca = list(reversed(PA)) if rev_a else PA
+        cb = list(reversed(PB)) if rev_b else PB
+        tA = arc_params(PA)
+        tB = arc_params(PB)
+        all_t = sorted(set(tA + tB))
+        rA = [pt_at(PA, tA, t) for t in all_t]
+        rB = [pt_at(PB, tB, t) for t in all_t]
+        if rev_a: rA = list(reversed(rA))
+        if rev_b: rB = list(reversed(rB))
+        faces = []
+        na, nb = len(ca), len(cb)
+        for i in range(na):
+            faces.append(tri(Am, ca[(i+1)%na], ca[i]))
+        for i in range(nb):
+            faces.append(tri(Bm, cb[i], cb[(i+1)%nb]))
+        n = len(rA)
+        for i in range(n):
+            j = (i+1)%n
+            faces.append(tri(rA[i], rB[j], rB[i]))
+            faces.append(tri(rA[i], rA[j], rB[j]))
+        sew = BRepBuilderAPI_Sewing(1e-2)
+        for f in faces: sew.Add(f)
+        sew.Perform()
+        try:
+            shell = TopoDS.Shell_s(sew.SewedShape())
+        except:
+            return None
+        fix = ShapeFix_Solid()
+        fix.Init(BRepBuilderAPI_MakeSolid(shell).Solid())
+        fix.Perform()
+        s = Solid(fix.Solid())
+        print(f"    rev_a={rev_a} rev_b={rev_b}: valid={s.is_valid} vol={s.volume:.1f}")
+        return s if s.is_valid and s.volume > 0 else None
+
+    for pts_b in [B, B_rev]:
+        wa = Wire.make_polygon([Vector(*p) for p in A], close=True)
+        wb = Wire.make_polygon([Vector(*p) for p in pts_b], close=True)
+        for ruled in [False, True]:
+            for w1, w2 in [(wa, wb), (wb, wa)]:
+                try:
+                    gen = BRepOffsetAPI_ThruSections(isSolid=True, ruled=ruled)
+                    gen.AddWire(w1.wrapped)
+                    gen.AddWire(w2.wrapped)
+                    gen.Build()
+                    s = Solid(gen.Shape())
+                    if s.is_valid and s.volume > 0:
+                        print(f"  loft49 ThruSections OK ruled={ruled} vol={s.volume:.1f}")
+                        return s
+                except: pass
+        for ra, rb in [(False,False),(True,False),(False,True),(True,True)]:
+            r = build(A, pts_b, ra, rb)
+            if r:
+                print(f"  loft49 OK vol={r.volume:.1f}")
+                return r
+
+    raise ValueError("loft49 failed")
+
+loft49 = make_loft49()
+
+print("Building loft 50...")
+
+def make_loft50():
+    from OCP.BRepOffsetAPI import BRepOffsetAPI_ThruSections
+    from OCP.BRepBuilderAPI import (BRepBuilderAPI_Sewing,
+                                     BRepBuilderAPI_MakeSolid,
+                                     BRepBuilderAPI_MakeFace)
+    from OCP.TopoDS import TopoDS
+    from OCP.ShapeFix import ShapeFix_Solid
+    import math
+
+    A = [
+        (1139.88,  1576.903, 239.056),  # 0
+        (1155.659, 1661.125, 280.884),  # 1
+        (1171.437, 1745.346, 322.712),  # 2
+        (1177.769, 1760.659, 304.565),  # 3
+        (1183.188, 1770.481, 284.462),  # 4
+        (1171.851, 1689.239, 241.713),  # 5
+        (1160.513, 1607.997, 198.964),  # 6
+    ]
+    B = [
+        (1127.906, 1595.655, 205.815),
+        (1141.972, 1670.734, 243.102),
+        (1156.037, 1745.813, 280.389),
+        (1171.455, 1776.426, 243.817),
+        (1150.62,  1627.117, 165.251),
+    ]
+    B_rev = list(reversed(B))
+
+    def tri(p1, p2, p3):
+        w = Wire.make_polygon([Vector(*p1), Vector(*p2), Vector(*p3)], close=True)
+        return BRepBuilderAPI_MakeFace(w.wrapped).Face()
+
+    def cap_tris_A(pts, flip):
+        # A is convex at index 4 — fan from there
+        pivot = 4
+        n = len(pts)
+        result = []
+        for i in range(1, n-1):
+            a = pivot
+            b = (pivot + i) % n
+            c = (pivot + i + 1) % n
+            if flip:
+                result.append(tri(pts[a], pts[c], pts[b]))
+            else:
+                result.append(tri(pts[a], pts[b], pts[c]))
+        return result
+
+    def arc_params(pts):
+        n = len(pts)
+        segs = [math.sqrt(sum((pts[(i+1)%n][j]-pts[i][j])**2 for j in range(3))) for i in range(n)]
+        total = sum(segs)
+        t, cum = [], 0.0
+        for s in segs:
+            t.append(cum/total); cum += s
+        return t
+
+    def pt_at(pts, ts, t):
+        n = len(pts)
+        t = t % 1.0
+        for i in range(n):
+            t1 = ts[(i+1)%n] if i < n-1 else 1.0
+            if ts[i] <= t <= t1+1e-10:
+                s = (t-ts[i])/(t1-ts[i]) if (t1-ts[i]) > 1e-12 else 0.0
+                p, q = pts[i], pts[(i+1)%n]
+                return tuple(p[j]+s*(q[j]-p[j]) for j in range(3))
+        return pts[0]
+
+    def build(PA, PB, flip_a=False, rev_b=False):
+        Bm = tuple(sum(v[i] for v in PB)/len(PB) for i in range(3))
+        cb = list(reversed(PB)) if rev_b else PB
+        tA = arc_params(PA)
+        tB = arc_params(PB)
+        all_t = sorted(set(tA + tB))
+        rA = [pt_at(PA, tA, t) for t in all_t]
+        rB = [pt_at(PB, tB, t) for t in all_t]
+        if rev_b: rB = list(reversed(rB))
+        faces = []
+        faces += cap_tris_A(PA, flip_a)
+        nb = len(cb)
+        for i in range(nb):
+            faces.append(tri(Bm, cb[i], cb[(i+1)%nb]))
+        n = len(rA)
+        for i in range(n):
+            j = (i+1)%n
+            faces.append(tri(rA[i], rB[j], rB[i]))
+            faces.append(tri(rA[i], rA[j], rB[j]))
+        sew = BRepBuilderAPI_Sewing(1e-2)
+        for f in faces: sew.Add(f)
+        sew.Perform()
+        try:
+            shell = TopoDS.Shell_s(sew.SewedShape())
+        except:
+            return None
+        fix = ShapeFix_Solid()
+        fix.Init(BRepBuilderAPI_MakeSolid(shell).Solid())
+        fix.Perform()
+        s = Solid(fix.Solid())
+        print(f"    flip_a={flip_a} rev_b={rev_b}: valid={s.is_valid} vol={s.volume:.1f}")
+        return s if s.is_valid and s.volume > 0 else None
+
+    for pts_b in [B, B_rev]:
+        wa = Wire.make_polygon([Vector(*p) for p in A], close=True)
+        wb = Wire.make_polygon([Vector(*p) for p in pts_b], close=True)
+        for ruled in [False, True]:
+            for w1, w2 in [(wa, wb), (wb, wa)]:
+                try:
+                    gen = BRepOffsetAPI_ThruSections(isSolid=True, ruled=ruled)
+                    gen.AddWire(w1.wrapped)
+                    gen.AddWire(w2.wrapped)
+                    gen.Build()
+                    s = Solid(gen.Shape())
+                    if s.is_valid and s.volume > 0:
+                        print(f"  loft50 ThruSections OK ruled={ruled} vol={s.volume:.1f}")
+                        return s
+                except: pass
+
+    for fa, rb in [(False,False),(True,False),(False,True),(True,True)]:
+        r = build(A, B, fa, rb)
+        if r:
+            print(f"  loft50 OK vol={r.volume:.1f}")
+            return r
+
+    raise ValueError("loft50 failed")
+
+loft50 = make_loft50()
+
+print("Building loft 51...")
+
+def make_loft51():
+    A = [
+        (1139.88,  1576.903, 239.056),
+        (1160.513, 1607.997, 198.964),
+        (1155.565, 1564.748, 179.993),
+        (1133.08,  1533.45,  221.156),
+    ]
+    B = [
+        (1127.906, 1595.655, 205.815),
+        (1150.62,  1627.117, 165.251),
+        (1144.775, 1574.734, 142.793),
+        (1119.854, 1543.03,  184.642),
+    ]
+
+    for pts_b in [B, list(reversed(B))]:
+        try:
+            s = make_loft_solid(A, pts_b)
+            if s.is_valid and s.volume > 0:
+                print(f"  loft51 make_loft_solid OK vol={s.volume:.1f}")
+                return s
+        except: pass
+
+    for pts_b in [B, list(reversed(B))]:
+        try:
+            s = make_ruled_solid(A, pts_b)
+            if s.is_valid and s.volume > 0:
+                print(f"  loft51 make_ruled_solid OK vol={s.volume:.1f}")
+                return s
+        except: pass
+
+    from OCP.BRepBuilderAPI import (BRepBuilderAPI_Sewing,
+                                     BRepBuilderAPI_MakeSolid,
+                                     BRepBuilderAPI_MakeFace)
+    from OCP.TopoDS import TopoDS
+    from OCP.ShapeFix import ShapeFix_Solid
+
+    def tri(p1, p2, p3):
+        w = Wire.make_polygon([Vector(*p1), Vector(*p2), Vector(*p3)], close=True)
+        return BRepBuilderAPI_MakeFace(w.wrapped).Face()
+
+    def build(PA, PB, ra, rb):
+        ca = list(reversed(PA)) if ra else PA
+        cb = list(reversed(PB)) if rb else PB
+        faces = []
+        if not ra:
+            faces += [tri(ca[0], ca[1], ca[2]), tri(ca[0], ca[2], ca[3])]
+        else:
+            faces += [tri(ca[0], ca[2], ca[1]), tri(ca[0], ca[3], ca[2])]
+        if not rb:
+            faces += [tri(cb[0], cb[2], cb[1]), tri(cb[0], cb[3], cb[2])]
+        else:
+            faces += [tri(cb[0], cb[1], cb[2]), tri(cb[0], cb[2], cb[3])]
+        for i in range(4):
+            j = (i+1)%4
+            faces += [tri(ca[i], cb[j], cb[i]), tri(ca[i], ca[j], cb[j])]
+        sew = BRepBuilderAPI_Sewing(1e-2)
+        for f in faces: sew.Add(f)
+        sew.Perform()
+        try:
+            shell = TopoDS.Shell_s(sew.SewedShape())
+        except:
+            return None
+        fix = ShapeFix_Solid()
+        fix.Init(BRepBuilderAPI_MakeSolid(shell).Solid())
+        fix.Perform()
+        s = Solid(fix.Solid())
+        print(f"    ra={ra} rb={rb}: valid={s.is_valid} vol={s.volume:.1f}")
+        return s if s.is_valid and s.volume > 0 else None
+
+    for pts_b in [B, list(reversed(B))]:
+        for ra, rb in [(False,False),(True,False),(False,True),(True,True)]:
+            r = build(A, pts_b, ra, rb)
+            if r:
+                print(f"  loft51 manual OK vol={r.volume:.1f}")
+                return r
+
+    raise ValueError("loft51 failed")
+
+loft51 = make_loft51()
+
+print("Building loft 52...")
+
+def make_loft52():
+    A = [
+        (1133.08,  1533.45,  221.156),
+        (1155.565, 1564.748, 179.993),
+        (1145.601, 1400.141, 138.699),
+        (1118.194, 1368.401, 183.245),
+    ]
+    B = [
+        (1119.854, 1543.03,  184.642),
+        (1144.775, 1574.734, 142.793),
+        (1134.811, 1410.126, 101.499),
+        (1104.968, 1377.981, 146.731),
+    ]
+
+    for pts_b in [B, list(reversed(B))]:
+        try:
+            s = make_loft_solid(A, pts_b)
+            if s.is_valid and s.volume > 0:
+                print(f"  loft52 make_loft_solid OK vol={s.volume:.1f}")
+                return s
+        except: pass
+
+    for pts_b in [B, list(reversed(B))]:
+        try:
+            s = make_ruled_solid(A, pts_b)
+            if s.is_valid and s.volume > 0:
+                print(f"  loft52 make_ruled_solid OK vol={s.volume:.1f}")
+                return s
+        except: pass
+
+    from OCP.BRepBuilderAPI import (BRepBuilderAPI_Sewing,
+                                     BRepBuilderAPI_MakeSolid,
+                                     BRepBuilderAPI_MakeFace)
+    from OCP.TopoDS import TopoDS
+    from OCP.ShapeFix import ShapeFix_Solid
+
+    def tri(p1, p2, p3):
+        w = Wire.make_polygon([Vector(*p1), Vector(*p2), Vector(*p3)], close=True)
+        return BRepBuilderAPI_MakeFace(w.wrapped).Face()
+
+    def build(PA, PB, ra, rb):
+        ca = list(reversed(PA)) if ra else PA
+        cb = list(reversed(PB)) if rb else PB
+        faces = []
+        if not ra:
+            faces += [tri(ca[0], ca[1], ca[2]), tri(ca[0], ca[2], ca[3])]
+        else:
+            faces += [tri(ca[0], ca[2], ca[1]), tri(ca[0], ca[3], ca[2])]
+        if not rb:
+            faces += [tri(cb[0], cb[2], cb[1]), tri(cb[0], cb[3], cb[2])]
+        else:
+            faces += [tri(cb[0], cb[1], cb[2]), tri(cb[0], cb[2], cb[3])]
+        for i in range(4):
+            j = (i+1)%4
+            faces += [tri(ca[i], cb[j], cb[i]), tri(ca[i], ca[j], cb[j])]
+        sew = BRepBuilderAPI_Sewing(1e-2)
+        for f in faces: sew.Add(f)
+        sew.Perform()
+        try:
+            shell = TopoDS.Shell_s(sew.SewedShape())
+        except:
+            return None
+        fix = ShapeFix_Solid()
+        fix.Init(BRepBuilderAPI_MakeSolid(shell).Solid())
+        fix.Perform()
+        s = Solid(fix.Solid())
+        print(f"    ra={ra} rb={rb}: valid={s.is_valid} vol={s.volume:.1f}")
+        return s if s.is_valid and s.volume > 0 else None
+
+    for pts_b in [B, list(reversed(B))]:
+        for ra, rb in [(False,False),(True,False),(False,True),(True,True)]:
+            r = build(A, pts_b, ra, rb)
+            if r:
+                print(f"  loft52 manual OK vol={r.volume:.1f}")
+                return r
+
+    raise ValueError("loft52 failed")
+
+loft52 = make_loft52()
+
+print("Building loft 53...")
+
+def make_loft53():
+    from OCP.BRepOffsetAPI import BRepOffsetAPI_ThruSections
+    from OCP.BRepBuilderAPI import (BRepBuilderAPI_Sewing,
+                                     BRepBuilderAPI_MakeSolid,
+                                     BRepBuilderAPI_MakeFace)
+    from OCP.TopoDS import TopoDS
+    from OCP.ShapeFix import ShapeFix_Solid
+    import math
+
+    A = [
+        (1118.194, 1368.401, 183.245),
+        (1145.601, 1400.141, 138.699),
+        (1143.758, 1353.421, 130.414),
+        (1115.191, 1321.592, 175.843),
+    ]
+    B = [
+        (1104.968, 1377.981, 146.731),
+        (1134.811, 1410.126, 101.499),
+        (1134.482, 1401.247, 100.0),
+        (1132.722, 1353.67,   91.967),
+        (1127.306, 1348.074, 100.0),
+        (1101.511, 1321.423, 138.256),
+    ]
+    B_rev = list(reversed(B))
+
+    def tri(p1, p2, p3):
+        w = Wire.make_polygon([Vector(*p1), Vector(*p2), Vector(*p3)], close=True)
+        return BRepBuilderAPI_MakeFace(w.wrapped).Face()
+
+    def arc_params(pts):
+        n = len(pts)
+        segs = [math.sqrt(sum((pts[(i+1)%n][j]-pts[i][j])**2 for j in range(3))) for i in range(n)]
+        total = sum(segs)
+        t, cum = [], 0.0
+        for s in segs:
+            t.append(cum/total); cum += s
+        return t
+
+    def pt_at(pts, ts, t):
+        n = len(pts)
+        t = t % 1.0
+        for i in range(n):
+            t1 = ts[(i+1)%n] if i < n-1 else 1.0
+            if ts[i] <= t <= t1+1e-10:
+                s = (t-ts[i])/(t1-ts[i]) if (t1-ts[i]) > 1e-12 else 0.0
+                p, q = pts[i], pts[(i+1)%n]
+                return tuple(p[j]+s*(q[j]-p[j]) for j in range(3))
+        return pts[0]
+
+    def build(PA, PB, rev_a=False, rev_b=False):
+        ca = list(reversed(PA)) if rev_a else PA
+        cb = list(reversed(PB)) if rev_b else PB
+        tA = arc_params(PA)
+        tB = arc_params(PB)
+        all_t = sorted(set(tA + tB))
+        rA = [pt_at(PA, tA, t) for t in all_t]
+        rB = [pt_at(PB, tB, t) for t in all_t]
+        if rev_a: rA = list(reversed(rA))
+        if rev_b: rB = list(reversed(rB))
+        faces = []
+        if not rev_a:
+            faces += [tri(ca[0], ca[1], ca[2]), tri(ca[0], ca[2], ca[3])]
+        else:
+            faces += [tri(ca[0], ca[2], ca[1]), tri(ca[0], ca[3], ca[2])]
+        Bm = tuple(sum(v[i] for v in cb)/len(cb) for i in range(3))
+        nb = len(cb)
+        for i in range(nb):
+            faces.append(tri(Bm, cb[i], cb[(i+1)%nb]))
+        n = len(rA)
+        for i in range(n):
+            j = (i+1)%n
+            faces.append(tri(rA[i], rB[j], rB[i]))
+            faces.append(tri(rA[i], rA[j], rB[j]))
+        sew = BRepBuilderAPI_Sewing(1e-2)
+        for f in faces: sew.Add(f)
+        sew.Perform()
+        try:
+            shell = TopoDS.Shell_s(sew.SewedShape())
+        except:
+            return None
+        fix = ShapeFix_Solid()
+        fix.Init(BRepBuilderAPI_MakeSolid(shell).Solid())
+        fix.Perform()
+        s = Solid(fix.Solid())
+        print(f"    rev_a={rev_a} rev_b={rev_b}: valid={s.is_valid} vol={s.volume:.1f}")
+        return s if s.is_valid and s.volume > 0 else None
+
+    for pts_b in [B, B_rev]:
+        wa = Wire.make_polygon([Vector(*p) for p in A], close=True)
+        wb = Wire.make_polygon([Vector(*p) for p in pts_b], close=True)
+        for ruled in [False, True]:
+            for w1, w2 in [(wa, wb), (wb, wa)]:
+                try:
+                    gen = BRepOffsetAPI_ThruSections(isSolid=True, ruled=ruled)
+                    gen.AddWire(w1.wrapped)
+                    gen.AddWire(w2.wrapped)
+                    gen.Build()
+                    s = Solid(gen.Shape())
+                    if s.is_valid and s.volume > 0:
+                        print(f"  loft53 ThruSections OK ruled={ruled} vol={s.volume:.1f}")
+                        return s
+                except: pass
+        for ra, rb in [(False,False),(True,False),(False,True),(True,True)]:
+            r = build(A, pts_b, ra, rb)
+            if r:
+                print(f"  loft53 OK vol={r.volume:.1f}")
+                return r
+
+    raise ValueError("loft53 failed")
+
+loft53 = make_loft53()
+
+print("Building loft 54...")
+
+def make_loft54():
+    from OCP.BRepOffsetAPI import BRepOffsetAPI_ThruSections
+    from OCP.BRepBuilderAPI import (BRepBuilderAPI_Sewing,
+                                     BRepBuilderAPI_MakeSolid,
+                                     BRepBuilderAPI_MakeFace)
+    from OCP.TopoDS import TopoDS
+    from OCP.ShapeFix import ShapeFix_Solid
+    import math
+
+    A = [
+        (1143.758, 1353.421, 130.414),
+        (1145.266, 1183.434, 128.88),
+        (1114.448, 1151.597, 176.88),
+        (1115.191, 1321.592, 175.843),
+    ]
+    B = [
+        (1132.722, 1353.67,   91.967),
+        (1134.23,  1183.683,  90.434),
+        (1127.678, 1177.368, 100.0),
+        (1100.767, 1151.428, 139.292),
+        (1101.511, 1321.423, 138.256),
+        (1127.306, 1348.074, 100.0),
+    ]
+    B_rev = list(reversed(B))
+
+    def tri(p1, p2, p3):
+        w = Wire.make_polygon([Vector(*p1), Vector(*p2), Vector(*p3)], close=True)
+        return BRepBuilderAPI_MakeFace(w.wrapped).Face()
+
+    def arc_params(pts):
+        n = len(pts)
+        segs = [math.sqrt(sum((pts[(i+1)%n][j]-pts[i][j])**2 for j in range(3))) for i in range(n)]
+        total = sum(segs)
+        t, cum = [], 0.0
+        for s in segs:
+            t.append(cum/total); cum += s
+        return t
+
+    def pt_at(pts, ts, t):
+        n = len(pts)
+        t = t % 1.0
+        for i in range(n):
+            t1 = ts[(i+1)%n] if i < n-1 else 1.0
+            if ts[i] <= t <= t1+1e-10:
+                s = (t-ts[i])/(t1-ts[i]) if (t1-ts[i]) > 1e-12 else 0.0
+                p, q = pts[i], pts[(i+1)%n]
+                return tuple(p[j]+s*(q[j]-p[j]) for j in range(3))
+        return pts[0]
+
+    def build(PA, PB, rev_a=False, rev_b=False):
+        ca = list(reversed(PA)) if rev_a else PA
+        cb = list(reversed(PB)) if rev_b else PB
+        tA = arc_params(PA)
+        tB = arc_params(PB)
+        all_t = sorted(set(tA + tB))
+        rA = [pt_at(PA, tA, t) for t in all_t]
+        rB = [pt_at(PB, tB, t) for t in all_t]
+        if rev_a: rA = list(reversed(rA))
+        if rev_b: rB = list(reversed(rB))
+        faces = []
+        if not rev_a:
+            faces += [tri(ca[0], ca[1], ca[2]), tri(ca[0], ca[2], ca[3])]
+        else:
+            faces += [tri(ca[0], ca[2], ca[1]), tri(ca[0], ca[3], ca[2])]
+        Bm = tuple(sum(v[i] for v in cb)/len(cb) for i in range(3))
+        nb = len(cb)
+        for i in range(nb):
+            faces.append(tri(Bm, cb[i], cb[(i+1)%nb]))
+        n = len(rA)
+        for i in range(n):
+            j = (i+1)%n
+            faces.append(tri(rA[i], rB[j], rB[i]))
+            faces.append(tri(rA[i], rA[j], rB[j]))
+        sew = BRepBuilderAPI_Sewing(1e-2)
+        for f in faces: sew.Add(f)
+        sew.Perform()
+        try:
+            shell = TopoDS.Shell_s(sew.SewedShape())
+        except:
+            return None
+        fix = ShapeFix_Solid()
+        fix.Init(BRepBuilderAPI_MakeSolid(shell).Solid())
+        fix.Perform()
+        s = Solid(fix.Solid())
+        print(f"    rev_a={rev_a} rev_b={rev_b}: valid={s.is_valid} vol={s.volume:.1f}")
+        return s if s.is_valid and s.volume > 0 else None
+
+    for pts_b in [B, B_rev]:
+        wa = Wire.make_polygon([Vector(*p) for p in A], close=True)
+        wb = Wire.make_polygon([Vector(*p) for p in pts_b], close=True)
+        for ruled in [False, True]:
+            for w1, w2 in [(wa, wb), (wb, wa)]:
+                try:
+                    gen = BRepOffsetAPI_ThruSections(isSolid=True, ruled=ruled)
+                    gen.AddWire(w1.wrapped)
+                    gen.AddWire(w2.wrapped)
+                    gen.Build()
+                    s = Solid(gen.Shape())
+                    if s.is_valid and s.volume > 0:
+                        print(f"  loft54 ThruSections OK ruled={ruled} vol={s.volume:.1f}")
+                        return s
+                except: pass
+        for ra, rb in [(False,False),(True,False),(False,True),(True,True)]:
+            r = build(A, pts_b, ra, rb)
+            if r:
+                print(f"  loft54 OK vol={r.volume:.1f}")
+                return r
+
+    raise ValueError("loft54 failed")
+
+loft54 = make_loft54()
+
+print("Building loft 55...")
+
+def make_loft55():
+    # A[0]↔B2, A[1]↔B0, A[2]↔B4, A[3]↔B3  (nearest spatial pairs)
+    A = [
+        (1114.448, 1151.597, 176.88),   # 0 top-left
+        (1145.266, 1183.434, 128.88),   # 1 top-right
+        (1146.64,  1136.058, 131.779),  # 2 bottom-right
+        (1115.424, 1104.254, 180.42),   # 3 bottom-left
+    ]
+    B = [
+        (1100.767, 1151.428, 139.292),  # →A[0] top-left
+        (1134.23,  1183.683,  90.434),  # →A[1] top-right
+        (1132.198, 1122.922, 100.0),    # →A[2] bottom-right
+        (1102.113, 1094.346, 144.025),  # →A[3] bottom-left
+    ]
+
+    try:
+        s = make_loft_solid(A, B)
+        if s.is_valid and s.volume > 0:
+            print(f"  loft55 make_loft_solid OK vol={s.volume:.1f}")
+            return s
+    except: pass
+
+    try:
+        s = make_ruled_solid(A, B)
+        if s.is_valid and s.volume > 0:
+            print(f"  loft55 make_ruled_solid OK vol={s.volume:.1f}")
+            return s
+    except: pass
+
+    try:
+        s = make_loft_solid(A, list(reversed(B)))
+        if s.is_valid and s.volume > 0:
+            print(f"  loft55 make_loft_solid rev OK vol={s.volume:.1f}")
+            return s
+    except: pass
+
+    try:
+        s = make_ruled_solid(A, list(reversed(B)))
+        if s.is_valid and s.volume > 0:
+            print(f"  loft55 make_ruled_solid rev OK vol={s.volume:.1f}")
+            return s
+    except: pass
+
+    raise ValueError("loft55 failed")
+
+loft55 = make_loft55()
+
+print("Building loft 56...")
+
+def make_loft56():
+    from OCP.BRepOffsetAPI import BRepOffsetAPI_ThruSections
+    from OCP.BRepBuilderAPI import (BRepBuilderAPI_Sewing,
+                                     BRepBuilderAPI_MakeSolid,
+                                     BRepBuilderAPI_MakeFace)
+    from OCP.TopoDS import TopoDS
+    from OCP.ShapeFix import ShapeFix_Solid
+    import math
+
+    A = [
+        (1146.64,  1136.058, 131.779),
+        (1160.666,  956.365, 173.478),
+        (1130.053,  925.024, 223.865),
+        (1115.424, 1104.254, 180.42),
+    ]
+    # Drop B[2]=(1136.023,1126.556,94.402) — 7.7mm near-degenerate edge
+    B = [
+        (1102.113, 1094.346, 144.025),  # 0
+        (1132.198, 1122.922, 100.0),    # 1
+        (1137.906, 1102.435, 100.0),    # 2
+        (1151.186,  932.293, 139.483),  # 3
+        (1117.928,  900.583, 190.992),  # 4
+    ]
+    B_rev = list(reversed(B))
+
+    def tri(p1, p2, p3):
+        w = Wire.make_polygon([Vector(*p1), Vector(*p2), Vector(*p3)], close=True)
+        return BRepBuilderAPI_MakeFace(w.wrapped).Face()
+
+    def fan(pts, pivot, flip):
+        n = len(pts)
+        result = []
+        for i in range(1, n-1):
+            a = pivot
+            b = (pivot + i) % n
+            c = (pivot + i + 1) % n
+            if flip:
+                result.append(tri(pts[a], pts[c], pts[b]))
+            else:
+                result.append(tri(pts[a], pts[b], pts[c]))
+        return result
+
+    def arc_params(pts):
+        n = len(pts)
+        segs = [math.sqrt(sum((pts[(i+1)%n][j]-pts[i][j])**2 for j in range(3))) for i in range(n)]
+        total = sum(segs)
+        t, cum = [], 0.0
+        for s in segs:
+            t.append(cum/total); cum += s
+        return t
+
+    def pt_at(pts, ts, t):
+        n = len(pts)
+        t = t % 1.0
+        for i in range(n):
+            t1 = ts[(i+1)%n] if i < n-1 else 1.0
+            if ts[i] <= t <= t1+1e-10:
+                s = (t-ts[i])/(t1-ts[i]) if (t1-ts[i]) > 1e-12 else 0.0
+                p, q = pts[i], pts[(i+1)%n]
+                return tuple(p[j]+s*(q[j]-p[j]) for j in range(3))
+        return pts[0]
+
+    def build(PA, PB, rev_a, rev_b, a_piv, b_piv, fa, fb):
+        ca = list(reversed(PA)) if rev_a else PA
+        cb = list(reversed(PB)) if rev_b else PB
+        tA = arc_params(PA)
+        tB = arc_params(PB)
+        all_t = sorted(set(tA + tB))
+        rA = [pt_at(PA, tA, t) for t in all_t]
+        rB = [pt_at(PB, tB, t) for t in all_t]
+        if rev_a: rA = list(reversed(rA))
+        if rev_b: rB = list(reversed(rB))
+        faces = []
+        faces += fan(ca, a_piv, fa)
+        faces += fan(cb, b_piv, fb)
+        n = len(rA)
+        for i in range(n):
+            j = (i+1)%n
+            faces.append(tri(rA[i], rB[j], rB[i]))
+            faces.append(tri(rA[i], rA[j], rB[j]))
+        sew = BRepBuilderAPI_Sewing(1e-2)
+        for f in faces: sew.Add(f)
+        sew.Perform()
+        try:
+            shell = TopoDS.Shell_s(sew.SewedShape())
+        except:
+            return None
+        fix = ShapeFix_Solid()
+        fix.Init(BRepBuilderAPI_MakeSolid(shell).Solid())
+        fix.Perform()
+        s = Solid(fix.Solid())
+        print(f"    ra={rev_a} rb={rev_b} ap={a_piv} bp={b_piv} fa={fa} fb={fb}: valid={s.is_valid} vol={s.volume:.1f}")
+        return s if s.is_valid and s.volume > 0 else None
+
+    for pts_b in [B, B_rev]:
+        wa = Wire.make_polygon([Vector(*p) for p in A], close=True)
+        wb = Wire.make_polygon([Vector(*p) for p in pts_b], close=True)
+        for ruled in [False, True]:
+            for w1, w2 in [(wa, wb), (wb, wa)]:
+                try:
+                    gen = BRepOffsetAPI_ThruSections(isSolid=True, ruled=ruled)
+                    gen.AddWire(w1.wrapped)
+                    gen.AddWire(w2.wrapped)
+                    gen.Build()
+                    s = Solid(gen.Shape())
+                    if s.is_valid and s.volume > 0:
+                        print(f"  loft56 ThruSections OK ruled={ruled} vol={s.volume:.1f}")
+                        return s
+                except: pass
+
+    # A: fan from index 1 (convex top-right)
+    # B: fan from index 3 or 4 (convex bottom)
+    for pts_b in [B, B_rev]:
+        for ra, rb in [(False,False),(True,False),(False,True),(True,True)]:
+            for ap in [1, 0]:
+                for bp in [3, 4, 0]:
+                    for fa, fb in [(False,False),(True,False),(False,True),(True,True)]:
+                        r = build(A, pts_b, ra, rb, ap, bp, fa, fb)
+                        if r:
+                            print(f"  loft56 OK vol={r.volume:.1f}")
+                            return r
+
+    raise ValueError("loft56 failed")
+
+loft56 = make_loft56()
+
+# ══════════════════════════════════════════════════════════════
+# Extruded Profile Body
+# Outer profile (148 edges) minus inner subtract profile (267 edges)
+# Extruded to Z = 50 mm
+# ══════════════════════════════════════════════════════════════
+print("Building extruded profile body...")
+ 
+ 
+def make_body():
+    # ──────────────────────────────────────────────────────────
+    # Outer profile edges  (start_xy, end_xy)
+    # ──────────────────────────────────────────────────────────
+    outer_edges = [
+        ((471.572, 570.72),    (743.398, 266.936)),   # 1
+        ((743.398, 266.936),   (750.049, 260.741)),   # 2
+        ((750.049, 260.741),   (757.715, 255.852)),   # 3
+        ((757.715, 255.852),   (766.132, 252.433)),   # 4
+        ((766.132, 252.433),   (775.038, 250.593)),   # 5
+        ((775.038, 250.593),   (784.111, 250.396)),   # 6
+        ((784.111, 250.396),   (793.083, 251.845)),   # 7
+        ((793.083, 251.845),   (801.635, 254.89)),    # 8
+        ((801.635, 254.89),    (809.501, 259.434)),   # 9
+        ((809.501, 259.434),   (828.916, 272.705)),   # 10
+        ((828.916, 272.705),   (847.854, 284.799)),   # 11
+        ((847.854, 284.799),   (866.327, 295.778)),   # 12
+        ((866.327, 295.778),   (884.345, 305.703)),   # 13
+        ((884.345, 305.703),   (901.917, 314.636)),   # 14
+        ((901.917, 314.636),   (919.055, 322.639)),   # 15
+        ((919.055, 322.639),   (935.769, 329.774)),   # 16
+        ((935.769, 329.774),   (952.068, 336.102)),   # 17
+        ((952.068, 336.102),   (983.467, 346.587)),   # 18
+        ((983.467, 346.587),   (1013.593, 354.669)),  # 19
+        ((1013.593, 354.669),  (1043.394, 360.943)),  # 20
+        ((1043.394, 360.943),  (1073.336, 365.679)),  # 21
+        ((1073.336, 365.679),  (1103.851, 369.131)),  # 22
+        ((1103.851, 369.131),  (1135.371, 371.555)),  # 23
+        ((1135.371, 371.555),  (1168.328, 373.205)),  # 24
+        ((1168.328, 373.205),  (1203.156, 374.337)),  # 25
+        ((1203.156, 374.337),  (1240.284, 375.204)),  # 26
+        ((1240.284, 375.204),  (1280.147, 376.063)),  # 27
+        ((1280.147, 376.063),  (1301.239, 376.568)),  # 28
+        ((1301.239, 376.568),  (1323.176, 377.167)),  # 29
+        ((1323.176, 377.167),  (1346.012, 377.891)),  # 30
+        ((1346.012, 377.891),  (1369.803, 378.772)),  # 31
+        ((1369.803, 378.772),  (1398.837, 382.366)),  # 32
+        ((1398.837, 382.366),  (1428.796, 386.876)),  # 33
+        ((1428.796, 386.876),  (1449.309, 390.922)),  # 34
+        ((1449.309, 390.922),  (1469.445, 396.203)),  # 35
+        ((1469.445, 396.203),  (1489.105, 402.692)),  # 36
+        ((1489.105, 402.692),  (1508.191, 410.357)),  # 37
+        ((1508.191, 410.357),  (1526.611, 419.161)),  # 38
+        ((1526.611, 419.161),  (1544.274, 429.061)),  # 39
+        ((1544.274, 429.061),  (1561.092, 440.007)),  # 40
+        ((1561.092, 440.007),  (1576.984, 451.947)),  # 41
+        ((1576.984, 451.947),  (1584.347, 458.367)),  # 42
+        ((1584.347, 458.367),  (1586.129, 459.64)),   # 43
+        ((1586.129, 459.64),   (1605.188, 476.474)),  # 44
+        ((1605.188, 476.474),  (1623.002, 492.404)),  # 45
+        ((1623.002, 492.404),  (1639.659, 507.482)),  # 46
+        ((1639.659, 507.482),  (1655.251, 521.756)),  # 47
+        ((1655.251, 521.756),  (1669.866, 535.277)),  # 48
+        ((1669.866, 535.277),  (1683.594, 548.094)),  # 49
+        ((1683.594, 548.094),  (1696.526, 560.258)),  # 50
+        ((1696.526, 560.258),  (1708.75,  571.818)),  # 51
+        ((1708.75,  571.818),  (1731.436, 593.324)),  # 52
+        ((1731.436, 593.324),  (1752.37,  613.013)),  # 53
+        ((1752.37,  613.013),  (1772.27,  631.283)),  # 54
+        ((1772.27,  631.283),  (1791.82,  648.501)),  # 55
+        ((1791.82,  648.501),  (1811.306, 664.672)),  # 56
+        ((1811.306, 664.672),  (1830.976, 679.739)),  # 57
+        ((1830.976, 679.739),  (1851.116, 693.683)),  # 58
+        ((1851.116, 693.683),  (1872.014, 706.485)),  # 59
+        ((1872.014, 706.485),  (1893.96,  718.124)),  # 60
+        ((1893.96,  718.124),  (1917.393, 728.641)),  # 61
+        ((1917.393, 728.641),  (1942.698, 738.006)),  # 62
+        ((1942.698, 738.006),  (1970.174, 746.142)),  # 63
+        ((1970.174, 746.142),  (1982.547, 750.497)),  # 64
+        ((1982.547, 750.497),  (1994.042, 756.828)),  # 65
+        ((1994.042, 756.828),  (2004.341, 764.949)),  # 66
+        ((2004.341, 764.949),  (2013.181, 774.633)),  # 67
+        ((2013.181, 774.633),  (2020.326, 785.596)),  # 68
+        ((2020.326, 785.596),  (2025.628, 797.596)),  # 69
+        ((2025.628, 797.596),  (2028.931, 810.264)),  # 70
+        ((2028.931, 810.264),  (2030.166, 823.314)),  # 71
+        ((2030.166, 823.314),  (2041.103, 1603.392)), # 72  ← long run up right side
+        ((2040.387, 1615.257), (2041.103, 1603.392)), # 73
+        ((2037.919, 1626.888), (2040.387, 1615.257)), # 74
+        ((2033.755, 1638.022), (2037.919, 1626.888)), # 75
+        ((2028.006, 1648.39),  (2033.755, 1638.022)), # 76
+        ((2020.79,  1657.791), (2028.006, 1648.39)),  # 77
+        ((2012.243, 1666.041), (2020.79,  1657.791)), # 78
+        ((2002.597, 1672.917), (2012.243, 1666.041)), # 79
+        ((1992.022, 1678.301), (2002.597, 1672.917)), # 80
+        ((1924.513, 1705.859), (1992.022, 1678.301)), # 81
+        ((1889.598, 1719.521), (1924.513, 1705.859)), # 82
+        ((1853.861, 1733.071), (1889.598, 1719.521)), # 83
+        ((1835.298, 1739.948), (1853.861, 1733.071)), # 84
+        ((1815.593, 1747.155), (1835.298, 1739.948)), # 85
+        ((1773.912, 1761.973), (1815.593, 1747.155)), # 86
+        ((1731.233, 1776.329), (1773.912, 1761.973)), # 87
+        ((1710.279, 1782.957), (1731.233, 1776.329)), # 88
+        ((1689.989, 1789.016), (1710.279, 1782.957)), # 89
+        ((1646.231, 1801.856), (1689.989, 1789.016)), # 90
+        ((1601.351, 1813.915), (1646.231, 1801.856)), # 91
+        ((1556.052, 1824.76),  (1601.351, 1813.915)), # 92
+        ((1511.087, 1833.95),  (1556.052, 1824.76)),  # 93
+        ((1468.068, 1841.006), (1511.087, 1833.95)),  # 94
+        ((1427.092, 1845.907), (1468.068, 1841.006)), # 95
+        ((1387.612, 1848.766), (1427.092, 1845.907)), # 96
+        ((1349.081, 1849.694), (1387.612, 1848.766)), # 97
+        ((786.222,  1849.694), (1349.081, 1849.694)), # 98  ← top flat
+        ((771.515,  1848.331), (786.222,  1849.694)), # 99
+        ((757.304,  1844.284), (771.515,  1848.331)), # 100
+        ((744.088,  1837.699), (757.304,  1844.284)), # 101
+        ((732.297,  1828.788), (744.088,  1837.699)), # 102
+        ((722.363,  1817.881), (732.297,  1828.788)), # 103
+        ((714.593,  1805.32),  (722.363,  1817.881)), # 104
+        ((709.268,  1791.557), (714.593,  1805.32)),  # 105
+        ((706.561,  1777.043), (709.268,  1791.557)), # 106
+        ((701.402,  1719.069), (706.561,  1777.043)), # 107
+        ((696.722,  1662.235), (701.402,  1719.069)), # 108
+        ((688.548,  1549.727), (696.722,  1662.235)), # 109
+        ((684.931,  1492.923), (688.548,  1549.727)), # 110
+        ((681.544,  1434.998), (684.931,  1492.923)), # 111
+        ((678.326,  1375.387), (681.544,  1434.998)), # 112
+        ((675.257,  1314.753), (678.326,  1375.387)), # 113
+        ((673.803,  1285.514), (675.257,  1314.753)), # 114
+        ((672.378,  1257.105), (673.803,  1285.514)), # 115
+        ((669.524,  1202.731), (672.378,  1257.105)), # 116
+        ((666.515,  1151.543), (669.524,  1202.731)), # 117
+        ((663.172,  1103.455), (666.515,  1151.543)), # 118
+        ((659.314,  1058.381), (663.172,  1103.455)), # 119
+        ((654.761,  1016.232), (659.314,  1058.381)), # 120
+        ((649.333,   976.924), (654.761,  1016.232)), # 121
+        ((642.851,   940.368), (649.333,   976.924)), # 122
+        ((638.579,   919.817), (642.851,   940.368)), # 123
+        ((634.056,   900.42),  (638.579,   919.817)), # 124
+        ((629.308,   882.136), (634.056,   900.42)),  # 125
+        ((624.361,   864.922), (629.308,   882.136)), # 126
+        ((619.241,   848.736), (624.361,   864.922)), # 127
+        ((613.973,   833.536), (619.241,   848.736)), # 128
+        ((608.585,   819.28),  (613.973,   833.536)), # 129
+        ((603.102,   805.925), (608.585,   819.28)),  # 130
+        ((597.376,   793.056), (603.102,   805.925)), # 131
+        ((591.604,   781.055), (597.376,   793.056)), # 132
+        ((580.039,   759.469), (591.604,   781.055)), # 133
+        ((568.522,   740.631), (580.039,   759.469)), # 134
+        ((556.294,   722.923), (568.522,   740.631)), # 135
+        ((543.143,   705.997), (556.294,   722.923)), # 136
+        ((529.041,   689.827), (543.143,   705.997)), # 137
+        ((513.96,    674.386), (529.041,   689.827)), # 138
+        ((497.979,   659.741), (513.96,    674.386)), # 139
+        ((478.316,   643.667), (497.979,   659.741)), # 140
+        ((470.866,   636.596), (478.316,   643.667)), # 141
+        ((465.018,   628.15),  (470.866,   636.596)), # 142
+        ((461.023,   618.696), (465.018,   628.15)),  # 143
+        ((459.043,   608.645), (461.023,   618.696)), # 144
+        ((459.043,   608.645), (459.156,   598.386)), # 145  ← bottom turning point
+        ((459.156,   598.386), (461.356,   588.377)), # 146
+        ((461.356,   588.377), (465.555,   579.02)),  # 147
+        ((465.555,   579.02),  (471.572,   570.72)),  # 148  → closes to edge 1 start
+    ]
+ 
+    # ──────────────────────────────────────────────────────────
+    # Subtract (inner) profile edges  (start_xy, end_xy)
+    # ──────────────────────────────────────────────────────────
+    inner_edges = [
+        ((622.712,  576.732),  (754.26,   405.075)),  # 1
+        ((754.26,   405.075),  (755.793,  395.123)),  # 2
+        ((755.793,  395.123),  (761.886,  395.123)),  # 3
+        ((761.886,  395.123),  (815.726,  324.868)),  # 4
+        ((815.726,  324.868),  (820.225,  320.234)),  # 5
+        ((820.225,  320.234),  (825.69,   316.774)),  # 6
+        ((825.69,   316.774),  (831.797,  314.678)),  # 7
+        ((831.797,  314.678),  (838.242,  314.004)),  # 8
+        ((838.242,  314.004),  (844.681,  314.727)),  # 9
+        ((844.681,  314.727),  (850.858,  316.751)),  # 10
+        ((850.858,  316.751),  (856.532,  319.936)),  # 11
+        ((856.532,  319.936),  (861.515,  324.122)),  # 12
+        ((861.515,  324.122),  (885.277,  347.489)),  # 13
+        ((885.277,  347.489),  (910.961,  371.336)),  # 14
+        ((910.961,  371.336),  (938.069,  395.123)),  # 15
+        ((938.069,  395.123),  (948.95,   395.123)),  # 16
+        ((948.95,   395.123),  (951.909,  395.355)),  # 17
+        ((951.909,  395.355),  (954.455,  396.039)),  # 18
+        ((954.455,  396.039),  (956.608,  397.151)),  # 19
+        ((956.608,  397.151),  (958.399,  398.651)),  # 20
+        ((958.399,  398.651),  (959.865,  400.495)),  # 21
+        ((959.865,  400.495),  (961.044,  402.631)),  # 22
+        ((961.044,  402.631),  (962.698,  407.578)),  # 23
+        ((962.698,  407.578),  (964.147,  418.793)),  # 24
+        ((964.147,  418.793),  (964.411,  429.7)),    # 25
+        ((964.411,  429.7),    (965.795,  442.126)),  # 26
+        ((965.795,  442.126),  (969.975,  453.909)),  # 27
+        ((969.975,  453.909),  (976.729,  464.43)),   # 28
+        ((976.729,  464.43),   (985.704,  473.134)),  # 29
+        ((985.704,  473.134),  (996.426,  479.565)),  # 30
+        ((996.426,  479.565),  (1008.332, 483.382)),  # 31
+        ((1008.332, 483.382),  (1020.794, 484.387)),  # 32
+        ((1020.794, 484.387),  (1033.157, 482.524)),  # 33
+        ((1033.157, 482.524),  (1044.77,  477.893)),  # 34
+        ((1044.77,  477.893),  (1055.023, 470.738)),  # 35
+        ((1055.023, 470.738),  (1063.375, 461.434)),  # 36
+        ((1063.375, 461.434),  (1069.387, 450.472)),  # 37
+        ((1069.387, 450.472),  (1072.305, 441.872)),  # 38
+        ((1072.305, 441.872),  (1074.429, 432.846)),  # 39
+        ((1074.429, 432.846),  (1078.063, 414.92)),   # 40
+        ((1078.063, 414.92),   (1080.825, 407.048)),  # 41
+        ((1080.825, 407.048),  (1082.758, 403.652)),  # 42
+        ((1082.758, 403.652),  (1085.186, 400.724)),  # 43
+        ((1085.186, 400.724),  (1088.197, 398.342)),  # 44
+        ((1088.197, 398.342),  (1091.873, 396.577)),  # 45
+        ((1091.873, 396.577),  (1096.283, 395.491)),  # 46
+        ((1096.283, 395.491),  (1101.474, 395.123)),  # 47
+        ((1101.474, 395.123),  (1234.748, 395.123)),  # 48  ← bottom flat run
+        ((1219.594, 448.619),  (1234.748, 395.123)),  # 49  ← notch turning vertex
+        ((1219.594, 448.619),  (1239.492, 438.096)),  # 50
+        ((1239.492, 438.096),  (1260.368, 429.109)),  # 51
+        ((1260.368, 429.109),  (1282.067, 421.723)),  # 52
+        ((1282.067, 421.723),  (1304.423, 415.996)),  # 53
+        ((1304.423, 415.996),  (1327.269, 411.971)),  # 54
+        ((1327.269, 411.971),  (1350.431, 409.677)),  # 55
+        ((1350.431, 409.677),  (1373.737, 409.131)),  # 56
+        ((1373.737, 409.131),  (1397.009, 410.339)),  # 57
+        ((1397.009, 410.339),  (1420.072, 413.291)),  # 58
+        ((1420.072, 413.291),  (1442.753, 417.965)),  # 59
+        ((1442.753, 417.965),  (1464.879, 424.325)),  # 60
+        ((1464.879, 424.325),  (1486.286, 432.324)),  # 61
+        ((1486.286, 432.324),  (1506.81,  441.901)),  # 62
+        ((1506.81,  441.901),  (1526.297, 452.984)),  # 63
+        ((1526.297, 452.984),  (1544.601, 465.489)),  # 64
+        ((1544.601, 465.489),  (1561.583, 479.322)),  # 65
+        ((1561.583, 479.322),  (1577.115, 494.38)),   # 66
+        ((1577.115, 494.38),   (1591.08,  510.547)),  # 67
+        ((1591.08,  510.547),  (1603.373, 527.703)),  # 68
+        ((1603.373, 527.703),  (1613.9,   545.717)),  # 69
+        ((1613.9,   545.717),  (1622.584, 564.455)),  # 70
+        ((1622.584, 564.455),  (1629.357, 583.774)),  # 71
+        ((1629.357, 583.774),  (1634.17,  603.53)),   # 72
+        ((1634.17,  603.53),   (1636.985, 623.572)),  # 73
+        ((1636.985, 623.572),  (1637.782, 643.751)),  # 74
+        ((1636.554, 663.913),  (1637.782, 643.751)),  # 75  ← turning vertex
+        ((1633.311, 683.907),  (1636.554, 663.913)),  # 76
+        ((1628.077, 703.582),  (1633.311, 683.907)),  # 77
+        ((1620.892, 722.79),   (1628.077, 703.582)),  # 78
+        ((1611.81,  741.385),  (1620.892, 722.79)),   # 79
+        ((1600.899, 759.228),  (1611.81,  741.385)),  # 80
+        ((1588.242, 776.184),  (1600.899, 759.228)),  # 81
+        ((1588.242, 776.184),  (1594.611, 776.513)),  # 82  ← turning vertex
+        ((1594.611, 776.513),  (1824.354, 776.513)),  # 83
+        ((1824.354, 776.513),  (1840.807, 776.566)),  # 84
+        ((1840.807, 776.566),  (1844.873, 776.876)),  # 85
+        ((1844.873, 776.876),  (1848.492, 777.768)),  # 86
+        ((1848.492, 777.768),  (1851.687, 779.209)),  # 87
+        ((1851.687, 779.209),  (1854.491, 781.15)),   # 88
+        ((1854.491, 781.15),   (1856.941, 783.535)),  # 89
+        ((1856.941, 783.535),  (1859.078, 786.303)),  # 90
+        ((1859.078, 786.303),  (1862.57,  792.732)),  # 91
+        ((1862.57,  792.732),  (1867.409, 807.502)),  # 92
+        ((1867.409, 807.502),  (1870.645, 822.36)),   # 93
+        ((1870.645, 822.36),   (1874.131, 833.767)),  # 94
+        ((1874.131, 833.767),  (1880.014, 844.143)),  # 95
+        ((1880.014, 844.143),  (1888.015, 852.991)),  # 96
+        ((1888.015, 852.991),  (1897.748, 859.886)),  # 97
+        ((1897.748, 859.886),  (1908.748, 864.498)),  # 98
+        ((1908.748, 864.498),  (1920.488, 866.607)),  # 99
+        ((1920.488, 866.607),  (1932.406, 866.111)),  # 100
+        ((1932.406, 866.111),  (1943.931, 863.035)),  # 101
+        ((1943.931, 863.035),  (1950.392, 860.969)),  # 102
+        ((1950.392, 860.969),  (1956.458, 859.93)),   # 103
+        ((1956.458, 859.93),   (1962.137, 859.866)),  # 104
+        ((1962.137, 859.866),  (1967.443, 860.709)),  # 105
+        ((1967.443, 860.709),  (1972.388, 862.375)),  # 106
+        ((1972.388, 862.375),  (1976.98,  864.779)),  # 107
+        ((1976.98,  864.779),  (1985.115, 871.465)),  # 108
+        ((1985.115, 871.465),  (1991.804, 880.155)),  # 109
+        ((1991.804, 880.155),  (1996.901, 890.381)),  # 110
+        ((1996.901, 890.381),  (2000.187, 901.836)),  # 111
+        ((2000.187, 901.836),  (2001.44,  914.366)),  # 112
+        ((2001.44,  914.366),  (2009.803, 1510.879)), # 113 ← long run right side
+        ((2004.543, 1525.487), (2009.803, 1510.879)), # 114
+        ((1998.778, 1539.05),  (2004.543, 1525.487)), # 115
+        ((1992.421, 1551.384), (1998.778, 1539.05)),  # 116
+        ((1985.306, 1562.144), (1992.421, 1551.384)), # 117
+        ((1977.181, 1570.808), (1985.306, 1562.144)), # 118
+        ((1972.642, 1574.151), (1977.181, 1570.808)), # 119
+        ((1967.726, 1576.712), (1972.642, 1574.151)), # 120
+        ((1962.388, 1578.397), (1967.726, 1576.712)), # 121
+        ((1956.586, 1579.12),  (1962.388, 1578.397)), # 122
+        ((1950.284, 1578.804), (1956.586, 1579.12)),  # 123
+        ((1943.454, 1577.395), (1950.284, 1578.804)), # 124
+        ((1930.962, 1575.458), (1943.454, 1577.395)), # 125
+        ((1918.36,  1576.45),  (1930.962, 1575.458)), # 126
+        ((1906.325, 1580.32),  (1918.36,  1576.45)),  # 127
+        ((1895.505, 1586.857), (1906.325, 1580.32)),  # 128
+        ((1886.483, 1595.712), (1895.505, 1586.857)), # 129
+        ((1879.743, 1606.407), (1886.483, 1595.712)), # 130
+        ((1875.649, 1618.368), (1879.743, 1606.407)), # 131
+        ((1874.42,  1630.95),  (1875.649, 1618.368)), # 132
+        ((1874.42,  1630.95),  (1876.124, 1643.476)), # 133 ← turning vertex
+        ((1876.124, 1643.476), (1877.401, 1652.794)), # 134
+        ((1876.419, 1661.458), (1877.401, 1652.794)), # 135
+        ((1873.526, 1669.569), (1876.419, 1661.458)), # 136
+        ((1869.125, 1677.243), (1873.526, 1669.569)), # 137
+        ((1863.578, 1684.585), (1869.125, 1677.243)), # 138
+        ((1857.171, 1691.679), (1863.578, 1684.585)), # 139
+        ((1842.441, 1705.311), (1857.171, 1691.679)), # 140
+        ((1840.188, 1706.168), (1842.441, 1705.311)), # 141
+        ((1823.765, 1712.261), (1840.188, 1706.168)), # 142
+        ((1805.491, 1718.942), (1823.765, 1712.261)), # 143
+        ((1785.807, 1726.011), (1805.491, 1718.942)), # 144
+        ((1765.154, 1733.269), (1785.807, 1726.011)), # 145
+        ((1722.706, 1747.551), (1765.154, 1733.269)), # 146
+        ((1701.794, 1754.176), (1722.706, 1747.551)), # 147
+        ((1681.678, 1760.19),  (1701.794, 1754.176)), # 148
+        ((1681.248, 1760.318), (1681.678, 1760.19)),  # 149
+        ((1641.225, 1772.093), (1681.248, 1760.318)), # 150
+        ((1599.91,  1783.304), (1641.225, 1772.093)), # 151
+        ((1557.947, 1793.565), (1599.91,  1783.304)), # 152
+        ((1515.984, 1802.486), (1557.947, 1793.565)), # 153
+        ((1482.385, 1808.485), (1515.984, 1802.486)), # 154
+        ((1448.907, 1813.311), (1482.385, 1808.485)), # 155
+        ((1442.458, 1809.252), (1448.907, 1813.311)), # 156
+        ((1436.351, 1804.436), (1442.458, 1809.252)), # 157
+        ((1430.601, 1798.828), (1436.351, 1804.436)), # 158
+        ((1425.223, 1792.397), (1430.601, 1798.828)), # 159
+        ((1420.229, 1785.117), (1425.223, 1792.397)), # 160
+        ((1415.629, 1776.963), (1420.229, 1785.117)), # 161
+        ((1411.432, 1767.918), (1415.629, 1776.963)), # 162
+        ((1407.643, 1757.969), (1411.432, 1767.918)), # 163
+        ((1402.25,  1746.708), (1407.643, 1757.969)), # 164
+        ((1394.436, 1736.969), (1402.25,  1746.708)), # 165
+        ((1384.61,  1729.265), (1394.436, 1736.969)), # 166
+        ((1373.289, 1723.999), (1384.61,  1729.265)), # 167
+        ((1361.067, 1721.448), (1373.289, 1723.999)), # 168
+        ((1348.585, 1721.745), (1361.067, 1721.448)), # 169
+        ((1336.498, 1724.875), (1348.585, 1721.745)), # 170
+        ((1325.44,  1730.674), (1336.498, 1724.875)), # 171
+        ((1315.993, 1738.838), (1325.44,  1730.674)), # 172
+        ((1308.651, 1748.937), (1315.993, 1738.838)), # 173
+        ((1303.801, 1760.442), (1308.651, 1748.937)), # 174
+        ((1301.696, 1772.749), (1303.801, 1760.442)), # 175
+        ((1301.277, 1785.885), (1301.696, 1772.749)), # 176
+        ((1301.277, 1785.885), (1301.503, 1798.082)), # 177 ← turning vertex
+        ((1301.503, 1798.082), (1302.371, 1809.348)), # 178
+        ((1302.371, 1809.348), (1303.871, 1819.694)), # 179
+        ((813.61,   1819.694), (1303.871, 1819.694)), # 180 ← top flat run
+        ((798.88,   1818.326), (813.61,   1819.694)), # 181
+        ((784.659,  1814.272), (798.88,   1818.326)), # 182
+        ((771.417,  1807.663), (784.659,  1814.272)), # 183
+        ((759.633,  1798.741), (771.417,  1807.663)), # 184
+        ((749.674,  1787.78),  (759.633,  1798.741)), # 185
+        ((741.913,  1775.185), (749.674,  1787.78)),  # 186
+        ((736.601,  1761.366), (741.913,  1775.185)), # 187
+        ((733.927,  1746.81),  (736.601,  1761.366)), # 188
+        ((724.239,  1629.208), (733.927,  1746.81)),  # 189
+        ((716.14,   1511.698), (724.239,  1629.208)), # 190
+        ((716.14,   1465.52),  (716.14,   1511.698)), # 191
+        ((716.14,   1465.52),  (717.387,  1453.452)), # 192 ← turning vertex
+        ((717.387,  1453.452), (720.984,  1442.723)), # 193
+        ((720.984,  1442.723), (726.608,  1433.273)), # 194
+        ((726.608,  1433.273), (733.905,  1425.093)), # 195
+        ((733.905,  1425.093), (742.577,  1418.261)), # 196
+        ((742.577,  1418.261), (752.422,  1412.95)),  # 197
+        ((752.422,  1412.95),  (763.339,  1409.397)), # 198
+        ((763.339,  1409.397), (775.306,  1407.837)), # 199
+        ((775.306,  1407.837), (787.944,  1405.817)), # 200
+        ((787.944,  1405.817), (799.763,  1400.906)), # 201
+        ((799.763,  1400.906), (810.111,  1393.373)), # 202
+        ((810.111,  1393.373), (818.417,  1383.635)), # 203
+        ((818.417,  1383.635), (824.222,  1372.228)), # 204
+        ((824.222,  1372.228), (827.207,  1359.782)), # 205
+        ((827.207,  1346.983), (827.207,  1359.782)), # 206 ← turning vertex
+        ((824.222,  1334.537), (827.207,  1346.983)), # 207
+        ((818.417,  1323.13),  (824.222,  1334.537)), # 208
+        ((810.111,  1313.392), (818.417,  1323.13)),  # 209
+        ((799.763,  1305.859), (810.111,  1313.392)), # 210
+        ((787.944,  1300.948), (799.763,  1305.859)), # 211
+        ((775.306,  1298.928), (787.944,  1300.948)), # 212
+        ((762.629,  1297.069), (775.306,  1298.928)), # 213
+        ((751.387,  1292.743), (762.629,  1297.069)), # 214
+        ((741.523,  1286.299), (751.387,  1292.743)), # 215
+        ((733.036,  1278.129), (741.523,  1286.299)), # 216
+        ((726.025,  1268.569), (733.036,  1278.129)), # 217
+        ((720.691,  1257.858), (726.025,  1268.569)), # 218
+        ((717.308,  1246.131), (720.691,  1257.858)), # 219
+        ((716.14,   1233.434), (717.308,  1246.131)), # 220
+        ((716.14,    982.59),  (716.14,   1233.434)), # 221
+        ((716.14,    982.59),  (717.593,   968.542)), # 222 ← turning vertex
+        ((717.593,   968.542), (721.787,   955.661)), # 223
+        ((721.787,   955.661), (728.35,    944.013)), # 224
+        ((728.35,    944.013), (736.878,   933.77)),  # 225
+        ((736.878,   933.77),  (747.035,   925.235)), # 226
+        ((747.035,   925.235), (758.598,   918.832)), # 227
+        ((758.598,   918.832), (771.463,   915.047)), # 228
+        ((771.463,   915.047), (778.377,   914.281)), # 229
+        ((778.377,   914.281), (785.615,   914.319)), # 230
+        ((785.615,   914.319), (798.229,   913.617)), # 231
+        ((798.229,   913.617), (810.341,   910.029)), # 232
+        ((810.341,   910.029), (821.303,   903.748)), # 233
+        ((821.303,   903.748), (830.524,   895.113)), # 234
+        ((830.524,   895.113), (837.509,   884.587)), # 235
+        ((837.509,   884.587), (841.882,   872.735)), # 236
+        ((841.882,   872.735), (843.41,    860.195)), # 237
+        ((842.009,   847.639), (843.41,    860.195)), # 238
+        ((837.756,   835.744), (842.009,   847.639)), # 239
+        ((830.877,   825.148), (837.756,   835.744)), # 240
+        ((821.744,   816.42),  (830.877,   825.148)), # 241
+        ((810.847,   810.029), (821.744,   816.42)),  # 242
+        ((798.771,   806.319), (810.847,   810.029)), # 243
+        ((786.165,   805.488), (798.771,   806.319)), # 244
+        ((773.707,   807.583), (786.165,   805.488)), # 245
+        ((759.244,   810.898), (773.707,   807.583)), # 246
+        ((744.717,   812.572), (759.244,   810.898)), # 247
+        ((730.136,   812.858), (744.717,   812.572)), # 248
+        ((715.513,   812.046), (730.136,   812.858)), # 249
+        ((686.176,   808.135), (715.513,   812.046)), # 250
+        ((656.761,   802.206), (686.176,   808.135)), # 251
+        ((645.097,   791.625), (656.761,   802.206)), # 252
+        ((634.421,   780.067), (645.097,   791.625)), # 253
+        ((624.8,     767.618), (634.421,   780.067)), # 254
+        ((616.3,     754.366), (624.8,     767.618)), # 255
+        ((608.992,   740.408), (616.3,     754.366)), # 256
+        ((602.96,    725.881), (608.992,   740.408)), # 257
+        ((598.257,   710.889), (602.96,    725.881)), # 258
+        ((594.939,   695.532), (598.257,   710.889)), # 259
+        ((593.057,   679.913), (594.939,   695.532)), # 260
+        ((592.667,   664.21),  (593.057,   679.913)), # 261
+        ((592.667,   664.21),  (593.802,   648.572)), # 262 ← turning vertex
+        ((593.802,   648.572), (596.492,   633.121)), # 263
+        ((596.492,   633.121), (600.757,   618.007)), # 264
+        ((600.757,   618.007), (606.565,   603.478)), # 265
+        ((606.565,   603.478), (613.891,   589.677)), # 266
+        ((613.891,   589.677), (622.712,   576.732)), # 267 → closes to edge 1 start
+    ]
+ 
+    # ── Build closed wires from edge lists ─────────────────────
+    def build_wire(edge_pairs):
+        segs = []
+        for (sx, sy), (ex, ey) in edge_pairs:
+            # Guard against degenerate edges
+            if abs(sx - ex) < 1e-9 and abs(sy - ey) < 1e-9:
+                continue
+            segs.append(
+                Edge.make_line(Vector(sx, sy, 0.0), Vector(ex, ey, 0.0))
+            )
+        return Wire(segs)
+ 
+    print("  Building outer wire...")
+    outer_wire = build_wire(outer_edges)
+    print(f"    outer wire valid={outer_wire.is_valid}")
+ 
+    print("  Building inner wire...")
+    inner_wire = build_wire(inner_edges)
+    print(f"    inner wire valid={inner_wire.is_valid}")
+ 
+    # ── 6 additional subtract hole profiles (24 edges each) ────
+    hole_edge_groups = [
+        # hole 1 — center ~(1924, 812)
+        [
+            ((1909.446, 786.685),  (1916.561, 783.738)),
+            ((1916.561, 783.738),  (1924.196, 782.733)),
+            ((1924.196, 782.733),  (1931.831, 783.738)),
+            ((1931.831, 783.738),  (1938.946, 786.685)),
+            ((1938.946, 786.685),  (1945.055, 791.374)),
+            ((1945.055, 791.374),  (1949.743, 797.483)),
+            ((1949.743, 797.483),  (1952.691, 804.598)),
+            ((1952.691, 804.598),  (1953.696, 812.233)),
+            ((1952.691, 819.868),  (1953.696, 812.233)),
+            ((1949.743, 826.983),  (1952.691, 819.868)),
+            ((1945.055, 833.093),  (1949.743, 826.983)),
+            ((1938.946, 837.781),  (1945.055, 833.093)),
+            ((1931.831, 840.728),  (1938.946, 837.781)),
+            ((1924.196, 841.733),  (1931.831, 840.728)),
+            ((1916.561, 840.728),  (1924.196, 841.733)),
+            ((1909.446, 837.781),  (1916.561, 840.728)),
+            ((1903.336, 833.093),  (1909.446, 837.781)),
+            ((1898.648, 826.983),  (1903.336, 833.093)),
+            ((1895.701, 819.868),  (1898.648, 826.983)),
+            ((1894.696, 812.233),  (1895.701, 819.868)),
+            ((1894.696, 812.233),  (1895.701, 804.598)),
+            ((1895.701, 804.598),  (1898.648, 797.483)),
+            ((1898.648, 797.483),  (1903.336, 791.374)),
+            ((1903.336, 791.374),  (1909.446, 786.685)),
+        ],
+        # hole 2 — center ~(1929, 1630)
+        [
+            ((1949.77,  1609.059), (1954.458, 1615.169)),
+            ((1954.458, 1615.169), (1957.406, 1622.284)),
+            ((1957.406, 1622.284), (1958.411, 1629.919)),
+            ((1957.406, 1637.554), (1958.411, 1629.919)),
+            ((1954.458, 1644.669), (1957.406, 1637.554)),
+            ((1949.77,  1650.779), (1954.458, 1644.669)),
+            ((1943.661, 1655.467), (1949.77,  1650.779)),
+            ((1936.546, 1658.414), (1943.661, 1655.467)),
+            ((1928.911, 1659.419), (1936.546, 1658.414)),
+            ((1921.276, 1658.414), (1928.911, 1659.419)),
+            ((1914.161, 1655.467), (1921.276, 1658.414)),
+            ((1908.051, 1650.779), (1914.161, 1655.467)),
+            ((1903.363, 1644.669), (1908.051, 1650.779)),
+            ((1900.416, 1637.554), (1903.363, 1644.669)),
+            ((1899.411, 1629.919), (1900.416, 1637.554)),
+            ((1899.411, 1629.919), (1900.416, 1622.284)),
+            ((1900.416, 1622.284), (1903.363, 1615.169)),
+            ((1903.363, 1615.169), (1908.051, 1609.059)),
+            ((1908.051, 1609.059), (1914.161, 1604.371)),
+            ((1914.161, 1604.371), (1921.276, 1601.424)),
+            ((1921.276, 1601.424), (1928.911, 1600.419)),
+            ((1928.911, 1600.419), (1936.546, 1601.424)),
+            ((1936.546, 1601.424), (1943.661, 1604.371)),
+            ((1943.661, 1604.371), (1949.77,  1609.059)),
+        ],
+        # hole 3 — center ~(1356, 1776)
+        [
+            ((1376.975, 1754.863), (1381.663, 1760.972)),
+            ((1381.663, 1760.972), (1384.61,  1768.087)),
+            ((1384.61,  1768.087), (1385.615, 1775.722)),
+            ((1384.61,  1783.357), (1385.615, 1775.722)),
+            ((1381.663, 1790.472), (1384.61,  1783.357)),
+            ((1376.975, 1796.582), (1381.663, 1790.472)),
+            ((1370.865, 1801.27),  (1376.975, 1796.582)),
+            ((1363.75,  1804.217), (1370.865, 1801.27)),
+            ((1356.115, 1805.222), (1363.75,  1804.217)),
+            ((1348.48,  1804.217), (1356.115, 1805.222)),
+            ((1341.365, 1801.27),  (1348.48,  1804.217)),
+            ((1335.255, 1796.582), (1341.365, 1801.27)),
+            ((1330.567, 1790.472), (1335.255, 1796.582)),
+            ((1327.62,  1783.357), (1330.567, 1790.472)),
+            ((1326.615, 1775.722), (1327.62,  1783.357)),
+            ((1326.615, 1775.722), (1327.62,  1768.087)),
+            ((1327.62,  1768.087), (1330.567, 1760.972)),
+            ((1330.567, 1760.972), (1335.255, 1754.863)),
+            ((1335.255, 1754.863), (1341.365, 1750.175)),
+            ((1341.365, 1750.175), (1348.48,  1747.227)),
+            ((1348.48,  1747.227), (1356.115, 1746.222)),
+            ((1356.115, 1746.222), (1363.75,  1747.227)),
+            ((1363.75,  1747.227), (1370.865, 1750.175)),
+            ((1370.865, 1750.175), (1376.975, 1754.863)),
+        ],
+        # hole 4 — center ~(773, 1353)
+        [
+            ((780.719, 1324.888), (787.834, 1327.835)),
+            ((787.834, 1327.835), (793.944, 1332.523)),
+            ((793.944, 1332.523), (798.632, 1338.633)),
+            ((798.632, 1338.633), (801.579, 1345.747)),
+            ((801.579, 1345.747), (802.584, 1353.383)),
+            ((801.579, 1361.018), (802.584, 1353.383)),
+            ((798.632, 1368.133), (801.579, 1361.018)),
+            ((793.944, 1374.242), (798.632, 1368.133)),
+            ((787.834, 1378.93),  (793.944, 1374.242)),
+            ((780.719, 1381.877), (787.834, 1378.93)),
+            ((773.084, 1382.883), (780.719, 1381.877)),
+            ((765.449, 1381.877), (773.084, 1382.883)),
+            ((758.334, 1378.93),  (765.449, 1381.877)),
+            ((752.224, 1374.242), (758.334, 1378.93)),
+            ((747.536, 1368.133), (752.224, 1374.242)),
+            ((744.589, 1361.018), (747.536, 1368.133)),
+            ((743.584, 1353.383), (744.589, 1361.018)),
+            ((743.584, 1353.383), (744.589, 1345.747)),
+            ((744.589, 1345.747), (747.536, 1338.633)),
+            ((747.536, 1338.633), (752.224, 1332.523)),
+            ((752.224, 1332.523), (758.334, 1327.835)),
+            ((758.334, 1327.835), (765.449, 1324.888)),
+            ((765.449, 1324.888), (773.084, 1323.882)),
+            ((773.084, 1323.882), (780.719, 1324.888)),
+        ],
+        # hole 5 — center ~(789, 860)
+        [
+            ((803.661, 834.371),  (809.77,  839.059)),
+            ((809.77,  839.059),  (814.458, 845.169)),
+            ((814.458, 845.169),  (817.406, 852.284)),
+            ((817.406, 852.284),  (818.411, 859.919)),
+            ((817.406, 867.554),  (818.411, 859.919)),
+            ((814.458, 874.669),  (817.406, 867.554)),
+            ((809.77,  880.779),  (814.458, 874.669)),
+            ((803.661, 885.467),  (809.77,  880.779)),
+            ((796.546, 888.414),  (803.661, 885.467)),
+            ((788.911, 889.419),  (796.546, 888.414)),
+            ((781.276, 888.414),  (788.911, 889.419)),
+            ((774.161, 885.467),  (781.276, 888.414)),
+            ((768.051, 880.779),  (774.161, 885.467)),
+            ((763.363, 874.669),  (768.051, 880.779)),
+            ((760.416, 867.554),  (763.363, 874.669)),
+            ((759.411, 859.919),  (760.416, 867.554)),
+            ((759.411, 859.919),  (760.416, 852.284)),
+            ((760.416, 852.284),  (763.363, 845.169)),
+            ((763.363, 845.169),  (768.051, 839.059)),
+            ((768.051, 839.059),  (774.161, 834.371)),
+            ((774.161, 834.371),  (781.276, 831.424)),
+            ((781.276, 831.424),  (788.911, 830.419)),
+            ((788.911, 830.419),  (796.546, 831.424)),
+            ((796.546, 831.424),  (803.661, 834.371)),
+        ],
+        # hole 6 — center ~(1019, 430)
+        [
+            ((998.051,  409.059),  (1004.161, 404.371)),
+            ((1004.161, 404.371),  (1011.276, 401.424)),
+            ((1011.276, 401.424),  (1018.911, 400.419)),
+            ((1018.911, 400.419),  (1026.546, 401.424)),
+            ((1026.546, 401.424),  (1033.661, 404.371)),
+            ((1033.661, 404.371),  (1039.77,  409.059)),
+            ((1039.77,  409.059),  (1044.458, 415.169)),
+            ((1044.458, 415.169),  (1047.406, 422.284)),
+            ((1047.406, 422.284),  (1048.411, 429.919)),
+            ((1047.406, 437.554),  (1048.411, 429.919)),
+            ((1044.458, 444.669),  (1047.406, 437.554)),
+            ((1039.77,  450.779),  (1044.458, 444.669)),
+            ((1033.661, 455.467),  (1039.77,  450.779)),
+            ((1026.546, 458.414),  (1033.661, 455.467)),
+            ((1018.911, 459.419),  (1026.546, 458.414)),
+            ((1011.276, 458.414),  (1018.911, 459.419)),
+            ((1004.161, 455.467),  (1011.276, 458.414)),
+            ((998.051,  450.779),  (1004.161, 455.467)),
+            ((993.363,  444.669),  (998.051,  450.779)),
+            ((990.416,  437.554),  (993.363,  444.669)),
+            ((989.411,  429.919),  (990.416,  437.554)),
+            ((989.411,  429.919),  (990.416,  422.284)),
+            ((990.416,  422.284),  (993.363,  415.169)),
+            ((993.363,  415.169),  (998.051,  409.059)),
+        ],
+    ]
+ 
+    hole_wires = []
+    for i, hg in enumerate(hole_edge_groups):
+        w = build_wire(hg)
+        print(f"    hole {i+1} wire valid={w.is_valid}")
+        hole_wires.append(w)
+ 
+    # ── Face with holes, then extrude ──────────────────────────
+    print("  Building face with inner subtract...")
+    with BuildPart() as part:
+        with BuildSketch(Plane.XY):
+            add(Face(outer_wire))
+            add(Face(inner_wire), mode=Mode.SUBTRACT)
+            for hw in hole_wires:
+                add(Face(hw), mode=Mode.SUBTRACT)
+        extrude(amount=50.0)
+ 
+    s = part.part
+    print(f"  Body valid={s.is_valid}, volume={s.volume:.1f} mm³")
+ 
+    if s.volume < 0:
+        print("  Volume negative — reversing extrude direction...")
+        with BuildPart() as part:
+            with BuildSketch(Plane.XY):
+                add(Face(outer_wire))
+                add(Face(inner_wire), mode=Mode.SUBTRACT)
+                for hw in hole_wires:
+                    add(Face(hw), mode=Mode.SUBTRACT)
+            extrude(amount=-50.0)
+        s = part.part
+        print(f"  Body (flipped) valid={s.is_valid}, volume={s.volume:.1f} mm³")
+ 
+    return s
+ 
+ 
+body = make_body()
+
 # ══════════════════════════════════════════════════════════════
 # Fuse
 # ══════════════════════════════════════════════════════════════
@@ -6549,6 +8022,15 @@ with BuildPart() as part:
     add(loft46)
     add(loft47)
     add(loft48)
+    add(loft49)
+    add(loft50)
+    add(loft51)
+    add(loft52)
+    add(loft53)
+    add(loft54)
+    add(loft55)
+    add(loft56)
+    add(body)
 print(f"  Final valid={part.part.is_valid}, volume={part.part.volume:.1f}")
 
 try:
